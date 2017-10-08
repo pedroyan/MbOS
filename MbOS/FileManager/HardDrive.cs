@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MbOS.Common;
+using MbOS.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,6 +51,29 @@ namespace MbOS.FileManager {
 			if (!hasInserted) {
 				throw new HardDriveOperationException($"O processo {file.OwnerPID} não pode criar o arquivo {file.FileName} (falta de espaço).");
 			}
+		}
+
+		/// <summary>
+		/// Realiza a remoção de um arquivo do HD
+		/// </summary>
+		/// <param name="fileName">Nome do arquivo a ser removido</param>
+		/// <param name="PID">ID do processo solicitando uma remoção</param>
+		public void RemoveFile(string fileName, int PID) {
+			var dispatchingService = RegistrationService.Resolve<IDispatcher>();
+			if (!dispatchingService.ExistsProcess(PID)) {
+				throw new HardDriveOperationException($"Falha ao deletar arquivo: Processo de ID {PID} não existe");
+			}
+
+			var file = diskDrive.FirstOrDefault(f => f.FileName == fileName);
+			if (file == null) {
+				throw new HardDriveOperationException($"Arquivo {fileName} não encontrado");
+			}
+
+			if (file.OwnerPID != PID && !dispatchingService.IsRealTimeProcess(PID)) {
+				throw new HardDriveOperationException($"Processo {PID} não possui permissão para deletar o arquivo");
+			}
+
+			diskDrive.Remove(file);
 		}
 
 		/// <summary>

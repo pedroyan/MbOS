@@ -8,5 +8,10 @@ namespace MbOS.UnitTest.FileManager {
 		public bool ExistsProcess(int id) {
 			return id < 5;
 		}
+
+		public bool IsRealTimeProcess(int PID) {
+			//Somente o processo com PID = 0 é considerado processo de tempo real no dipatcher de testes
+			return PID == 0;
+		}
 	}
 }
