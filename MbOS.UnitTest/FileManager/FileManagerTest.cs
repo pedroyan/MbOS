@@ -83,6 +83,30 @@ namespace MbOS.UnitTest.FileManager {
 			var hd = new HardDrive(13, initializationList);
 			var file = new HardDriveEntry("E", 0, 3);
 			TestAdicionarArquivo(hd, file, deveFuncionar: true);
+
+			// A|A|E|E|E|B|B|B|C|0| D| D| 0|
+			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
+			var resultFile = hd.GetEntryAt(1);
+			Assert.AreEqual(resultFile, file);
+
+			file = new HardDriveEntry("F", 0, 2);
+			TestAdicionarArquivo(hd, file, deveFuncionar: false);
+
+			// A|A|E|E|E|B|B|B|C|G| D| D| 0|
+			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
+			file = new HardDriveEntry("G", 0, 1);
+			TestAdicionarArquivo(hd, file, deveFuncionar: true);
+
+			resultFile = hd.GetEntryAt(4);
+			Assert.AreEqual(resultFile, file);
+
+			// A|A|E|E|E|B|B|B|C|G| D| D| H|
+			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
+			file = new HardDriveEntry("H", 0, 1);
+			TestAdicionarArquivo(hd, file, deveFuncionar: true);
+
+			resultFile = hd.GetEntryAt(6);
+			Assert.AreEqual(resultFile, file);
 		}
 
 		private void TestSetorInvalido(List<HardDriveEntry> initList, int hdSize) {

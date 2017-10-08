@@ -85,5 +85,12 @@ namespace MbOS.FileManager {
 
 			diskDrive.Add(file);
 		}
+
+		public HardDriveEntry GetEntryAt(int index) {
+			if (index >= diskDrive.Count -1) {
+				throw new IndexOutOfRangeException();
+			}
+			return diskDrive[index];
+		}
 	}
 }
