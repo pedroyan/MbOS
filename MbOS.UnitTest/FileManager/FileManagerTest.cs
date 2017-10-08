@@ -68,6 +68,23 @@ namespace MbOS.UnitTest.FileManager {
 			#endregion
 		}
 
+		[TestMethod]
+		public void AddFileTest() {
+
+			// A|A|0|0|0|B|B|B|C|0| D| D| 0|
+			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
+			var initializationList = new List<HardDriveEntry>() {
+				new HardDriveEntry("A",0,2),
+				new HardDriveEntry("B",0,3){StartSector = 5},
+				new HardDriveEntry("C",0,1){StartSector=8},
+				new HardDriveEntry("D",0,2){StartSector=10}
+			};
+
+			var hd = new HardDrive(13, initializationList);
+			var file = new HardDriveEntry("E", 0, 3);
+			TestAdicionarArquivo(hd, file, deveFuncionar: true);
+		}
+
 		private void TestSetorInvalido(List<HardDriveEntry> initList, int hdSize) {
 			try {
 				var hd = new HardDrive(hdSize, initList);
@@ -93,6 +110,19 @@ namespace MbOS.UnitTest.FileManager {
 		private void TestOverlap(List<HardDriveEntry> initList, int hdSize, bool deveFuncionar) {
 			try {
 				var hd = new HardDrive(hdSize, initList);
+				if (!deveFuncionar) {
+					Assert.Fail();
+				}
+			} catch (HardDriveOperationException) {
+				if (deveFuncionar) {
+					Assert.Fail();
+				}
+			}
+		}
+
+		private void TestAdicionarArquivo(HardDrive hd, HardDriveEntry file, bool deveFuncionar) {
+			try {
+				hd.AddFile(file);
 				if (!deveFuncionar) {
 					Assert.Fail();
 				}

@@ -24,7 +24,7 @@ namespace MbOS.FileManager {
 		/// Adiciona um arquivo no disco utilizando o algoritmo First-Fit
 		/// </summary>
 		/// <param name="file">Arquivo á ser adicionado</param>
-		private void AddFile(HardDriveEntry file) {
+		public void AddFile(HardDriveEntry file) {
 
 			if (file == null) {
 				throw new ArgumentException("Arquivo não pode ser nulo", nameof(file));
@@ -35,9 +35,9 @@ namespace MbOS.FileManager {
 			for (int i = 0; i < diskDrive.Count - 1; i++) {
 
 				var primeiroIndiceLivre = diskDrive[i].StartSector + diskDrive[i].FileSize;
-				var holeSize = primeiroIndiceLivre - diskDrive[i + 1].StartSector;
+				var holeSize =  diskDrive[i + 1].StartSector - primeiroIndiceLivre;
 
-				if (file.FileSize < holeSize) {
+				if (file.FileSize <= holeSize) {
 					hasInserted = true;
 					file.StartSector = primeiroIndiceLivre;
 					diskDrive.Insert(i + 1, file);
