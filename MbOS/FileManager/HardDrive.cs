@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MbOS.FileManager {
@@ -9,23 +10,20 @@ namespace MbOS.FileManager {
 		private int size;
 
 		public HardDrive(int size, List<FileInfo> initialFiles) {
-
-			var endOfDisk = new FileInfo() {
-				FileName = null,
-				FileSize = 0,
+			var endOfDisk = new FileInfo(null, 0, 1) {
 				StartSector = size
 			};
-
 			this.size = size;
 
 			hardDrive = new List<FileInfo>() { endOfDisk };
-
-			foreach (var file in initialFiles) {
-				InitializeFile(file);
-			}
+			InitilizeFiles(initialFiles);
 		}
 
-		public void AddFile(FileInfo file, int PID) {
+		/// <summary>
+		/// Adiciona um arquivo no disco utilizando o algoritmo First-Fit
+		/// </summary>
+		/// <param name="file">Arquivo á ser adicionado</param>
+		private void AddFile(FileInfo file) {
 
 			if (file == null) {
 				throw new ArgumentException("Arquivo não pode ser nulo", nameof(file));
@@ -48,15 +46,35 @@ namespace MbOS.FileManager {
 			}
 
 			if (!hasInserted) {
-				throw new HardDriveOperationException($"O processo {PID} não pode criar o arquivo {file.FileName} (falta de espaço).");
+				throw new HardDriveOperationException($"O processo {file.OwnerPID} não pode criar o arquivo {file.FileName} (falta de espaço).");
 			}
 		}
 
-		public void InitializeFile(FileInfo file) {
+		/// <summary>
+		/// Realiza a inicialização do disco
+		/// </summary>
+		/// <param name="intializationList">Arquivos a serem inicializados</param>
+		private void InitilizeFiles(List<FileInfo> intializationList) {
+			var orderedFiles = intializationList.OrderBy(f => f.StartSector);
+			foreach (var file in orderedFiles) {
+				InitializeFile(file);
+			}
+		}
+
+		private void InitializeFile(FileInfo file) {
 
 			if (file.StartSector >= size || file.StartSector < 0) {
 				throw new ArgumentOutOfRangeException(nameof(file.StartSector), $"Arquivo {file.FileName} inicializado fora do disco. (Indice {file.StartSector})");
 			}
+
+			var fileOnSpace = hardDrive.FirstOrDefault(f => f.IntersectSpace(file));
+			if (fileOnSpace != null) {
+				throw new HardDriveOperationException(
+					$"O Arquivo {file.FileName} não pode ser adicionado pois o arquivo {fileOnSpace.FileName} já ocupa o setor apontado"
+				);
+			}
+
+			hardDrive.Add(file);
 		}
 	}
 }
