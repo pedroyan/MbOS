@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MbOS.FileManager {
-	public class FileInfo {
+	public class HardDriveEntry {
 		public int OwnerPID { get; set; }
 		public string FileName { get; set; }
 		public int StartSector { get; set; }
@@ -16,7 +16,7 @@ namespace MbOS.FileManager {
 		/// <param name="nomeArquivo">Nome do Arquivo a ser criado</param>
 		/// <param name="ownerPID">Processo criador do arquivo</param>
 		/// <param name="fileSize">Tamannho do arquivo</param>
-		public FileInfo(string nomeArquivo,int ownerPID, int fileSize) {
+		public HardDriveEntry(string nomeArquivo,int ownerPID, int fileSize) {
 			if (fileSize < 1) {
 				throw new ArgumentOutOfRangeException(nameof(fileSize), "O arquivo deve ocupar pelo menos um bloco");
 			}
@@ -31,7 +31,7 @@ namespace MbOS.FileManager {
 		/// </summary>
 		/// <param name="file">Arquivo a ser analisado</param>
 		/// <returns></returns>
-		public bool IntersectSpace(FileInfo file) {
+		public bool IntersectSpace(HardDriveEntry file) {
 			return file.StartSector <= StartSector && file.StartSector >= StartSector + FileSize - 1;
 		}
 	}

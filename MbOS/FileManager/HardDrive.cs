@@ -6,16 +6,16 @@ using System.Text;
 namespace MbOS.FileManager {
 	public class HardDrive {
 
-		private List<FileInfo> diskDrive;
+		private List<HardDriveEntry> diskDrive;
 		private int diskSize;
 
-		public HardDrive(int size, List<FileInfo> initialFiles) {
-			var endOfDisk = new FileInfo(null, 0, 1) {
+		public HardDrive(int size, List<HardDriveEntry> initialFiles) {
+			var endOfDisk = new HardDriveEntry(null, 0, 1) {
 				StartSector = size
 			};
 			this.diskSize = size;
 
-			diskDrive = new List<FileInfo>() { endOfDisk };
+			diskDrive = new List<HardDriveEntry>() { endOfDisk };
 			InitilizeFiles(initialFiles);
 		}
 
@@ -23,7 +23,7 @@ namespace MbOS.FileManager {
 		/// Adiciona um arquivo no disco utilizando o algoritmo First-Fit
 		/// </summary>
 		/// <param name="file">Arquivo á ser adicionado</param>
-		private void AddFile(FileInfo file) {
+		private void AddFile(HardDriveEntry file) {
 
 			if (file == null) {
 				throw new ArgumentException("Arquivo não pode ser nulo", nameof(file));
@@ -54,7 +54,7 @@ namespace MbOS.FileManager {
 		/// Realiza a inicialização dos arquivos no disco
 		/// </summary>
 		/// <param name="intializationList">Arquivos a serem inicializados</param>
-		private void InitilizeFiles(List<FileInfo> intializationList) {
+		private void InitilizeFiles(List<HardDriveEntry> intializationList) {
 			var orderedFiles = intializationList.OrderBy(f => f.StartSector);
 			foreach (var file in orderedFiles) {
 				InitializeFile(file);
@@ -65,7 +65,7 @@ namespace MbOS.FileManager {
 		/// Realiza inicializa um arquivo no disco
 		/// </summary>
 		/// <param name="file">Arquivo a ser inicializado</param>
-		private void InitializeFile(FileInfo file) {
+		private void InitializeFile(HardDriveEntry file) {
 
 			if (file.StartSector >= diskSize || file.StartSector < 0) {
 				throw new ArgumentOutOfRangeException(nameof(file.StartSector), $"Arquivo {file.FileName} inicializado fora do disco. (Indice {file.StartSector})");
