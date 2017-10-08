@@ -15,8 +15,9 @@ namespace MbOS.FileManager {
 			};
 			this.diskSize = size;
 
-			diskDrive = new List<HardDriveEntry>() { endOfDisk };
+			diskDrive = new List<HardDriveEntry>();
 			InitilizeFiles(initialFiles);
+			diskDrive.Add(endOfDisk);
 		}
 
 		/// <summary>

@@ -32,7 +32,7 @@ namespace MbOS.FileManager {
 		/// <param name="file">Arquivo a ser analisado</param>
 		/// <returns></returns>
 		public bool IntersectSpace(HardDriveEntry file) {
-			return file.StartSector <= StartSector && file.StartSector >= StartSector + FileSize - 1;
+			return StartSector <= file.StartSector && file.StartSector <= StartSector + FileSize - 1;
 		}
 	}
 }
