@@ -81,7 +81,10 @@ namespace MbOS.UnitTest.FileManager {
 			};
 
 			var hd = new HardDrive(13, initializationList);
-			var file = new HardDriveEntry("E", 0, 3);
+			var file = new HardDriveEntry("E", 7, 3);
+			TestAdicionarArquivo(hd, file, deveFuncionar: false);
+
+			file = new HardDriveEntry("E", 0, 3);
 			TestAdicionarArquivo(hd, file, deveFuncionar: true);
 
 			// A|A|E|E|E|B|B|B|C|0| D| D| 0|
@@ -107,6 +110,42 @@ namespace MbOS.UnitTest.FileManager {
 
 			resultFile = hd.GetEntryAt(6);
 			Assert.AreEqual(resultFile, file);
+		}
+
+		[TestMethod]
+		public void RemoveFileTest() {
+
+			// A|A|0|0|0|B|B|B|C|0| D| D| 0|
+			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
+			var initializationList = new List<HardDriveEntry>() {
+				new HardDriveEntry("A",0,2),
+				new HardDriveEntry("B",1,3){StartSector = 5},
+				new HardDriveEntry("C",2,1){StartSector=8},
+				new HardDriveEntry("D",3,2){StartSector=10}
+			};
+
+			var hd = new HardDrive(13, initializationList);
+
+			//Não é dono do processo
+			TestRemoverArquivo(hd, "A", 1, deveFuncionar: false);
+
+			//Arquivo não existe
+			TestRemoverArquivo(hd, "E", 0, deveFuncionar: false);
+
+			//Processo não existe
+			TestRemoverArquivo(hd, "E", 7, deveFuncionar: false);
+
+			//Processo em tempo real removendo um arquivo de outro processo
+			TestRemoverArquivo(hd, "B", 0, deveFuncionar: true);
+
+			//Processo dono do arquivo deleta o arquivo
+			TestRemoverArquivo(hd, "C", 2, deveFuncionar: true);
+
+			// A|A|0|0|0|0|0|0|0|0| D| D| 0|
+			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
+			var file = new HardDriveEntry("E", 0, 8);
+			TestAdicionarArquivo(hd,file, deveFuncionar: true);
+			Assert.AreEqual(file, hd.GetEntryAt(1));
 		}
 
 		private void TestSetorInvalido(List<HardDriveEntry> initList, int hdSize) {
@@ -150,7 +189,22 @@ namespace MbOS.UnitTest.FileManager {
 				if (!deveFuncionar) {
 					Assert.Fail();
 				}
-			} catch (HardDriveOperationException) {
+			} catch (HardDriveOperationException ex) {
+				Console.WriteLine(ex.Message);
+				if (deveFuncionar) {
+					Assert.Fail();
+				}
+			}
+		}
+
+		private void TestRemoverArquivo(HardDrive hd, string filename,int PID, bool deveFuncionar) {
+			try {
+				hd.RemoveFile(filename,PID);
+				if (!deveFuncionar) {
+					Assert.Fail();
+				}
+			} catch (HardDriveOperationException ex) {
+				Console.WriteLine(ex.Message);
 				if (deveFuncionar) {
 					Assert.Fail();
 				}

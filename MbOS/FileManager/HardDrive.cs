@@ -10,6 +10,7 @@ namespace MbOS.FileManager {
 
 		private List<HardDriveEntry> diskDrive;
 		private int diskSize;
+		private IDispatcher dispatcher = RegistrationService.Resolve<IDispatcher>();
 
 		public HardDrive(int size, List<HardDriveEntry> initialFiles) {
 			var endOfDisk = new HardDriveEntry(null, 0, 1) {
@@ -27,9 +28,12 @@ namespace MbOS.FileManager {
 		/// </summary>
 		/// <param name="file">Arquivo á ser adicionado</param>
 		public void AddFile(HardDriveEntry file) {
-
 			if (file == null) {
 				throw new ArgumentException("Arquivo não pode ser nulo", nameof(file));
+			}
+
+			if (!dispatcher.ExistsProcess(file.OwnerPID)) {
+				throw new HardDriveOperationException($"Erro ao criar arquivo: Processo {file.OwnerPID} não existe");
 			}
 
 			bool hasInserted = false;
@@ -59,8 +63,7 @@ namespace MbOS.FileManager {
 		/// <param name="fileName">Nome do arquivo a ser removido</param>
 		/// <param name="PID">ID do processo solicitando uma remoção</param>
 		public void RemoveFile(string fileName, int PID) {
-			var dispatchingService = RegistrationService.Resolve<IDispatcher>();
-			if (!dispatchingService.ExistsProcess(PID)) {
+			if (!dispatcher.ExistsProcess(PID)) {
 				throw new HardDriveOperationException($"Falha ao deletar arquivo: Processo de ID {PID} não existe");
 			}
 
@@ -69,7 +72,7 @@ namespace MbOS.FileManager {
 				throw new HardDriveOperationException($"Arquivo {fileName} não encontrado");
 			}
 
-			if (file.OwnerPID != PID && !dispatchingService.IsRealTimeProcess(PID)) {
+			if (file.OwnerPID != PID && !dispatcher.IsRealTimeProcess(PID)) {
 				throw new HardDriveOperationException($"Processo {PID} não possui permissão para deletar o arquivo");
 			}
 
