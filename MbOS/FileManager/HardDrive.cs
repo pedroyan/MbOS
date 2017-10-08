@@ -6,16 +6,16 @@ using System.Text;
 namespace MbOS.FileManager {
 	public class HardDrive {
 
-		private List<FileInfo> hardDrive;
-		private int size;
+		private List<FileInfo> diskDrive;
+		private int diskSize;
 
 		public HardDrive(int size, List<FileInfo> initialFiles) {
 			var endOfDisk = new FileInfo(null, 0, 1) {
 				StartSector = size
 			};
-			this.size = size;
+			this.diskSize = size;
 
-			hardDrive = new List<FileInfo>() { endOfDisk };
+			diskDrive = new List<FileInfo>() { endOfDisk };
 			InitilizeFiles(initialFiles);
 		}
 
@@ -31,15 +31,15 @@ namespace MbOS.FileManager {
 
 			bool hasInserted = false;
 			//itera do começo até o penultimo elemento
-			for (int i = 0; i < hardDrive.Count - 1; i++) {
+			for (int i = 0; i < diskDrive.Count - 1; i++) {
 
-				var primeiroIndiceLivre = hardDrive[i].StartSector + hardDrive[i].FileSize;
-				var holeSize = primeiroIndiceLivre - hardDrive[i + 1].StartSector;
+				var primeiroIndiceLivre = diskDrive[i].StartSector + diskDrive[i].FileSize;
+				var holeSize = primeiroIndiceLivre - diskDrive[i + 1].StartSector;
 
 				if (file.FileSize < holeSize) {
 					hasInserted = true;
 					file.StartSector = primeiroIndiceLivre;
-					hardDrive.Insert(i + 1, file);
+					diskDrive.Insert(i + 1, file);
 					break;
 				}
 
@@ -51,7 +51,7 @@ namespace MbOS.FileManager {
 		}
 
 		/// <summary>
-		/// Realiza a inicialização do disco
+		/// Realiza a inicialização dos arquivos no disco
 		/// </summary>
 		/// <param name="intializationList">Arquivos a serem inicializados</param>
 		private void InitilizeFiles(List<FileInfo> intializationList) {
@@ -61,20 +61,28 @@ namespace MbOS.FileManager {
 			}
 		}
 
+		/// <summary>
+		/// Realiza inicializa um arquivo no disco
+		/// </summary>
+		/// <param name="file">Arquivo a ser inicializado</param>
 		private void InitializeFile(FileInfo file) {
 
-			if (file.StartSector >= size || file.StartSector < 0) {
+			if (file.StartSector >= diskSize || file.StartSector < 0) {
 				throw new ArgumentOutOfRangeException(nameof(file.StartSector), $"Arquivo {file.FileName} inicializado fora do disco. (Indice {file.StartSector})");
 			}
 
-			var fileOnSpace = hardDrive.FirstOrDefault(f => f.IntersectSpace(file));
+			var fileOnSpace = diskDrive.FirstOrDefault(f => f.IntersectSpace(file));
 			if (fileOnSpace != null) {
 				throw new HardDriveOperationException(
 					$"O Arquivo {file.FileName} não pode ser adicionado pois o arquivo {fileOnSpace.FileName} já ocupa o setor apontado"
 				);
 			}
 
-			hardDrive.Add(file);
+			if (file.StartSector + file.FileSize > diskSize) {
+				throw new ArgumentOutOfRangeException(nameof(file), $"Arquivo {file.FileName} está ultrapassando os limites do disco");
+			}
+
+			diskDrive.Add(file);
 		}
 	}
 }
