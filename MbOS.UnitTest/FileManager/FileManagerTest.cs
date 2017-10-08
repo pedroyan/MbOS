@@ -41,6 +41,17 @@ namespace MbOS.UnitTest.FileManager {
 			};
 			TestEspacoEstourado(ListaArquivos, 5, deveFuncionar: true);
 
+			ListaArquivos = new List<HardDriveEntry>() {
+				new HardDriveEntry("A",0,1){StartSector = 0},
+				new HardDriveEntry("A",0,2){StartSector = 1},
+				new HardDriveEntry("A",0,3){StartSector = 3},
+			};
+			TestEspacoEstourado(ListaArquivos, 5, deveFuncionar: false);
+
+			ListaArquivos = new List<HardDriveEntry>() {
+				new HardDriveEntry("A",0,6){StartSector = 0}
+			};
+			TestEspacoEstourado(ListaArquivos, 5, deveFuncionar: false);
 		}
 
 		private void TestSetorInvalido(List<HardDriveEntry> initList, int hdSize) {
@@ -49,8 +60,6 @@ namespace MbOS.UnitTest.FileManager {
 				Assert.Fail();
 			} catch (ArgumentOutOfRangeException ex) {
 				Assert.IsTrue(ex.ParamName == nameof(HardDriveEntry.StartSector));
-			} catch (Exception) {
-				Assert.Fail();
 			}
 		}
 
@@ -61,13 +70,9 @@ namespace MbOS.UnitTest.FileManager {
 					Assert.Fail();
 				}
 			} catch (ArgumentOutOfRangeException ex) {
-				if (!deveFuncionar) {
-					Assert.IsTrue(ex.ParamName == nameof(HardDriveEntry));
-				} else {
+				if (deveFuncionar) {
 					Assert.Fail();
 				}
-			} catch (Exception) {
-				Assert.Fail();
 			}
 		}
 	}

@@ -23,7 +23,7 @@ namespace MbOS.FileManager {
 
 			OwnerPID = ownerPID;
 			FileName = nomeArquivo;
-			FileSize = FileSize;
+			FileSize = fileSize;
 		}
 
 		/// <summary>
