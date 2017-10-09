@@ -1,5 +1,6 @@
 ﻿using MbOS.Common;
 using MbOS.FileManager;
+using MbOS.FileManager.DataStructures;
 using MbOS.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

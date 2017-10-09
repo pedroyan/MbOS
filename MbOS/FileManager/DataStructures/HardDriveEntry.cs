@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MbOS.FileManager {
+namespace MbOS.FileManager.DataStructures {
 	public class HardDriveEntry {
 		public int OwnerPID { get; set; }
 		public string FileName { get; set; }
