@@ -20,21 +20,19 @@ namespace MbOS.FileDomain {
 			var location = AppDomain.CurrentDomain.BaseDirectory;
 			try {
 				StreamReader file = new StreamReader($"{location}\\{FileName}");
-				string line;
-
-				while ((line = file.ReadLine()) != null) {
-					System.Console.WriteLine(line);
-				}
-
+				InitializeHDD(file);
+			} catch (FileNotFoundException) {
+				Console.WriteLine($"Erro ao ler arquivo: arquivo não encontrado no path de execução {location}");
+			} catch (DirectoryNotFoundException) {
+				Console.WriteLine($"Diretório do arquivo inválido: {location}");
 			} catch (Exception ex) {
-				if (ex is FileNotFoundException) {
-					Console.WriteLine($"Erro ao ler arquivo: arquivo não encontrado no path de execução {location}");
-				} else if (ex is DirectoryNotFoundException) {
-					Console.WriteLine("Diretório do arquivo inválido");
-				} else {
-					Console.WriteLine(ex.Message);
-				}
-				throw;
+				Console.WriteLine($"Erro ao ler arquivo{ex.Message}");
+			}
+		}
+
+		private void InitializeHDD(StreamReader reader) {
+			var line = reader.ReadLine();
+			if (!int.TryParse(reader.ReadLine(), out int hdSize)) {
 			}
 		}
 	}
