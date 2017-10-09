@@ -12,7 +12,7 @@ namespace MbOS.UnitTest.FileManager {
 	public class FileManagerTest {
 		[TestInitialize]
 		public void Initialization() {
-			RegistrationService.RegisterInstance<IDispatcher>(new MockDispatcher());
+			RegistrationService.RegisterInstance<IProcessService>(new MockDispatcher());
 		}
 
 		[TestMethod]

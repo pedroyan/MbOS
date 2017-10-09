@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MbOS.Interfaces {
-	public interface IDispatcher {
+	public interface IProcessService {
 		/// <summary>
 		/// Verifica se um processo existe
 		/// </summary>

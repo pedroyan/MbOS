@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MbOS.UnitTest.FileManager {
-	class MockDispatcher : IDispatcher {
+	class MockProcessService : IProcessService {
 		public bool ExistsProcess(int id) {
 			return id < 5;
 		}

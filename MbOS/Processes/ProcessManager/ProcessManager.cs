@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MbOS.Processes.ProcessDispatcher {
-	class ProcessDispatcher : IDispatcher {
+namespace MbOS.Processes.ProcessManager {
+	public class ProcessManager : IProcessService {
 		public bool ExistsProcess(int id) {
 			return id < 5;
 		}
