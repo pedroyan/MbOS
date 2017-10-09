@@ -1,6 +1,6 @@
 ﻿using MbOS.Common;
-using MbOS.FileManager;
-using MbOS.FileManager.DataStructures;
+using MbOS.FileDomain;
+using MbOS.FileDomain.DataStructures;
 using MbOS.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -12,7 +12,7 @@ namespace MbOS.UnitTest.FileManager {
 	public class FileManagerTest {
 		[TestInitialize]
 		public void Initialization() {
-			RegistrationService.RegisterInstance<IProcessService>(new MockDispatcher());
+			RegistrationService.RegisterInstance<IProcessService>(new MockProcessService());
 		}
 
 		[TestMethod]

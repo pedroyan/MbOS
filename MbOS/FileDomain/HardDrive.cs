@@ -1,12 +1,12 @@
 ﻿using MbOS.Common;
-using MbOS.FileManager.DataStructures;
+using MbOS.FileDomain.DataStructures;
 using MbOS.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MbOS.FileManager {
+namespace MbOS.FileDomain {
 	public class HardDrive {
 
 		private List<HardDriveEntry> diskDrive;
