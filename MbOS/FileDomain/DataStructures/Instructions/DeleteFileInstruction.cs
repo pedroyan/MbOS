@@ -8,6 +8,8 @@ namespace MbOS.FileDomain.DataStructures.Instructions {
 
 		public override void Execute(HardDrive hdd, int operationNumber) {
 			hdd.RemoveFile(FileName,PID);
+			Console.WriteLine($"Operação {operationNumber} => Sucesso");
+			Console.WriteLine($"O Processo {PID} deletou o arquivo {FileName}");
 		}
 	}
 }
