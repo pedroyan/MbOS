@@ -20,7 +20,7 @@ namespace MbOS.FileDomain.DataStructures.Instructions {
 		public override void Execute(HardDrive hdd, int operationNumber) {
 			var file = hdd.AddFile(new HardDriveEntry(FileName, PID, FileSize));
 			Console.WriteLine($"Operacao {operationNumber} => Sucesso");
-			Console.WriteLine($"O processo {PID} criou o arquivo ");
+			Console.WriteLine($"O processo {PID} criou o arquivo {FileName} ({file.GetOccupiedBlocks()})");
 		}
 	}
 }

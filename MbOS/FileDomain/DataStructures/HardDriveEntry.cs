@@ -34,5 +34,14 @@ namespace MbOS.FileDomain.DataStructures {
 		public bool IntersectSpace(HardDriveEntry file) {
 			return StartSector <= file.StartSector && file.StartSector <= StartSector + FileSize - 1;
 		}
+
+		public string GetOccupiedBlocks() {
+			string toReturn = $"blocos {StartSector}";
+			for (int i = 1; i < FileSize; i++) {
+				var separador = i == FileSize - 1 ? " e " : ", ";
+				toReturn += $"{separador}{StartSector + i}";
+			}
+			return toReturn;
+		}
 	}
 }

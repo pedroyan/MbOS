@@ -44,13 +44,16 @@ namespace MbOS.FileDomain {
 
 		private void ExecuteInstructions(StreamReader file) {
 			string line;
+			int i = 1;
 			while ((line = GetNextLine()) != null) {
 				var inst = ParseInstruction(line);
 				try {
-					inst.Execute(hardDrive);
+					inst.Execute(hardDrive,i);
 				} catch (HardDriveOperationException ex) {
-					Console.WriteLine()
+					Console.WriteLine($"Operacao {i} => Falha");
+					Console.WriteLine(ex.Message);
 				}
+				i++;
 			}
 		}
 

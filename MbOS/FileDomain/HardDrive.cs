@@ -74,7 +74,8 @@ namespace MbOS.FileDomain {
 				throw new HardDriveOperationException($"Arquivo {fileName} não encontrado");
 			}
 
-			if (file.OwnerPID != PID && !processService.IsRealTimeProcess(PID)) {
+			///Arquivos inicializados podem ser deletados por qualquer um, conforme o exemplo exibido no PDF
+			if (file.OwnerPID.HasValue && (file.OwnerPID != PID && !processService.IsRealTimeProcess(PID))) {
 				throw new HardDriveOperationException($"Processo {PID} não possui permissão para deletar o arquivo");
 			}
 

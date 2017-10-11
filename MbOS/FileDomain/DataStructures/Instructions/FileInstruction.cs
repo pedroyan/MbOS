@@ -7,7 +7,7 @@ namespace MbOS.FileDomain.DataStructures.Instructions {
 
 		protected FileInstruction (int pid, string fileName) {
 			PID = pid;
-			FileName = FileName;
+			FileName = fileName;
 		}
 
 		/// <summary>
