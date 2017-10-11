@@ -53,6 +53,7 @@ namespace MbOS.FileDomain {
 					Console.WriteLine($"Operacao {i} => Falha");
 					Console.WriteLine(ex.Message);
 				}
+				Console.WriteLine();
 				i++;
 			}
 		}

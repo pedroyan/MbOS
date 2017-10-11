@@ -12,6 +12,11 @@ namespace MbOS.FileDomain {
 		private List<HardDriveEntry> diskDrive;
 		private int diskSize;
 		private IProcessService processService = RegistrationService.Resolve<IProcessService>();
+		//public string HardDriveMap {
+		//	get {
+
+		//	}
+		//}
 
 		public HardDrive(int size, List<HardDriveEntry> initialFiles) {
 			this.diskSize = size;
@@ -35,10 +40,19 @@ namespace MbOS.FileDomain {
 			}
 
 			bool hasInserted = false;
-			//itera do começo até o penultimo elemento
-			for (int i = 0; i < diskDrive.Count; i++) {
 
-				var primeiroIndiceLivre = diskDrive[i].StartSector + diskDrive[i].FileSize;
+			var firstFile = diskDrive.FirstOrDefault();
+			bool startsWithFile = firstFile != null && firstFile.StartSector == 0;
+
+			//itera do começo até o penultimo elemento
+			for (int i = -1; i < diskDrive.Count; i++) {
+
+				if (i<0 && startsWithFile) {
+					continue;
+				}
+
+				var primeiroIndiceLivre = i<0 ? 0 : diskDrive[i].StartSector + diskDrive[i].FileSize;
+
 				var holeSize = i != diskDrive.Count - 1 ?
 					diskDrive[i + 1].StartSector - primeiroIndiceLivre
 					: (diskSize) - primeiroIndiceLivre;

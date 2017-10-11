@@ -6,7 +6,7 @@ using System.Text;
 namespace MbOS.Processes.ProcessManager {
 	public class ProcessManager : IProcessService {
 		public bool ExistsProcess(int id) {
-			return id < 5;
+			return id < 5 && id != 2;
 		}
 
 		public bool IsRealTimeProcess(int PID) {
