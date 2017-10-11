@@ -33,7 +33,7 @@ namespace MbOS.FileDomain {
 				throw new ArgumentException("Arquivo não pode ser nulo", nameof(file));
 			}
 
-			if (!processService.ExistsProcess(file.OwnerPID)) {
+			if (file.OwnerPID.HasValue && !processService.ExistsProcess(file.OwnerPID.Value)) {
 				throw new HardDriveOperationException($"Erro ao criar arquivo: Processo {file.OwnerPID} não existe");
 			}
 
