@@ -45,7 +45,12 @@ namespace MbOS.FileDomain {
 		private void ExecuteInstructions(StreamReader file) {
 			string line;
 			while ((line = GetNextLine()) != null) {
-				Console.WriteLine(line);
+				var inst = ParseInstruction(line);
+				try {
+					inst.Execute(hardDrive);
+				} catch (HardDriveOperationException ex) {
+					Console.WriteLine()
+				}
 			}
 		}
 
@@ -111,12 +116,25 @@ namespace MbOS.FileDomain {
 				throw new FileFormatException($"Instrução na linha {lineCount} não possui o número de argumentos necessário");
 			}
 
-			if (!int.TryParse(arguments[0],out int pid)) {
+			if (!int.TryParse(arguments[0], out int pid)) {
 				throw new FileFormatException($"Linha {lineCount} - primeiro argumento precisa ser um numero inteiro");
 			}
 
+			if (!Enum.TryParse(arguments[1], out FileOperationCode code)) {
+				throw new FileFormatException($"Linha {lineCount} - segundo argumento precisa ser um código de operação válido");
+			}
 
-			return null;
+			var filename = arguments[2];
+
+			if (code == FileOperationCode.CreateFile) {
+				if (!int.TryParse(arguments[3], out int fileSize)) {
+					throw new FileFormatException($"Linha {lineCount} - quarto argumento precisa ser um numero inteiro");
+				}
+				return new CreateFileInstruction(filename, pid, fileSize);
+			}
+
+
+			return new DeleteFileInstruction(filename,pid);
 		}
 
 		private string GetNextLine() {

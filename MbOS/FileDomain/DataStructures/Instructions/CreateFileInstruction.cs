@@ -10,11 +10,17 @@ namespace MbOS.FileDomain.DataStructures.Instructions {
 		/// <summary>
 		/// Cria um instrução de criação de arquivos
 		/// </summary>
-		/// <param name="pid">Id do processo que solicita a instrução</param>
 		/// <param name="fileName">Nome do arquivo a ser criado</param>
+		/// <param name="PID">Id do processo que solicita a instrução</param>
 		/// <param name="fileSize">Tamanho do arquivo a ser criado</param>
-		public CreateFileInstruction(int pid, string fileName, int fileSize) : base(FileOperationCode.CreateFile, pid, fileName) {
+		public CreateFileInstruction(string fileName, int PID, int fileSize) : base(PID, fileName) {
 			FileSize = fileSize;
+		}
+
+		public override void Execute(HardDrive hdd, int operationNumber) {
+			var file = hdd.AddFile(new HardDriveEntry(FileName, PID, FileSize));
+			Console.WriteLine($"Operacao {operationNumber} => Sucesso");
+			Console.WriteLine($"O processo {PID} criou o arquivo ");
 		}
 	}
 }

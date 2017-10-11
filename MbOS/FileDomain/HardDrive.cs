@@ -24,7 +24,8 @@ namespace MbOS.FileDomain {
 		/// Adiciona um arquivo no disco utilizando o algoritmo First-Fit
 		/// </summary>
 		/// <param name="file">Arquivo á ser adicionado</param>
-		public void AddFile(HardDriveEntry file) {
+		/// <returns>O arquivo adicionado no hd</returns>
+		public HardDriveEntry AddFile(HardDriveEntry file) {
 			if (file == null) {
 				throw new ArgumentException("Arquivo não pode ser nulo", nameof(file));
 			}
@@ -54,6 +55,8 @@ namespace MbOS.FileDomain {
 			if (!hasInserted) {
 				throw new HardDriveOperationException($"O processo {file.OwnerPID} não pode criar o arquivo {file.FileName} (falta de espaço).");
 			}
+
+			return file;
 		}
 
 		/// <summary>

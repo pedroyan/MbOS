@@ -5,15 +5,10 @@ using System.Text;
 namespace MbOS.FileDomain.DataStructures.Instructions {
 	public abstract class FileInstruction {
 
-		protected FileInstruction (FileOperationCode operationCode, int pid, string fileName) {
-			Operation = operationCode;
+		protected FileInstruction (int pid, string fileName) {
 			PID = pid;
 			FileName = FileName;
 		}
-		/// <summary>
-		/// Código da operação realizada
-		/// </summary>
-		public FileOperationCode Operation { get; set; }
 
 		/// <summary>
 		/// ID do processo realizando a operação
@@ -24,5 +19,12 @@ namespace MbOS.FileDomain.DataStructures.Instructions {
 		/// Nome do arquivo a ser operado
 		/// </summary>
 		public string FileName { get; set; }
+
+		/// <summary>
+		/// Executa a instrução
+		/// </summary>
+		/// <param name="hdd">HDD que será executada a instrução</param>
+		/// <param name="operationNumber">Número da instrução</param>
+		public abstract void Execute(HardDrive hdd, int operationNumber);
 	}
 }
