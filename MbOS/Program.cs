@@ -10,7 +10,6 @@ namespace MbOS {
 			RegistrationService.RegisterInstance<IProcessService>(new ProcessManager());
 			var manager = new FileManager("files.txt");
 			manager.RunFileManager();
-			Console.WriteLine("Hello World!");
 			Console.ReadKey();
 		}
 	}
