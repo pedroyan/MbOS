@@ -14,14 +14,10 @@ namespace MbOS.FileDomain {
 		private IProcessService processService = RegistrationService.Resolve<IProcessService>();
 
 		public HardDrive(int size, List<HardDriveEntry> initialFiles) {
-			var endOfDisk = new HardDriveEntry(null, 0, 1) {
-				StartSector = size
-			};
 			this.diskSize = size;
 
 			diskDrive = new List<HardDriveEntry>();
 			InitilizeFiles(initialFiles);
-			diskDrive.Add(endOfDisk);
 		}
 
 		/// <summary>
@@ -39,10 +35,12 @@ namespace MbOS.FileDomain {
 
 			bool hasInserted = false;
 			//itera do começo até o penultimo elemento
-			for (int i = 0; i < diskDrive.Count - 1; i++) {
+			for (int i = 0; i < diskDrive.Count; i++) {
 
 				var primeiroIndiceLivre = diskDrive[i].StartSector + diskDrive[i].FileSize;
-				var holeSize =  diskDrive[i + 1].StartSector - primeiroIndiceLivre;
+				var holeSize = i != diskDrive.Count - 1 ?
+					diskDrive[i + 1].StartSector - primeiroIndiceLivre
+					: (diskSize) - primeiroIndiceLivre;
 
 				if (file.FileSize <= holeSize) {
 					hasInserted = true;
@@ -116,9 +114,6 @@ namespace MbOS.FileDomain {
 		}
 
 		public HardDriveEntry GetEntryAt(int index) {
-			if (index >= diskDrive.Count -1) {
-				throw new IndexOutOfRangeException();
-			}
 			return diskDrive[index];
 		}
 	}
