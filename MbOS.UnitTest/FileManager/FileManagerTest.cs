@@ -111,6 +111,15 @@ namespace MbOS.UnitTest.FileManager {
 
 			resultFile = hd.GetEntryAt(6);
 			Assert.AreEqual(resultFile, file);
+
+			TestRemoverArquivo(hd, "A", 0, deveFuncionar: true);
+
+			// 0|0|E|E|E|B|B|B|C|G| D| D| H|
+			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
+			file = new HardDriveEntry("F", 0, 2);
+			TestAdicionarArquivo(hd, file, deveFuncionar: true);
+
+			resultFile = hd.GetEntryAt(0);
 		}
 
 		[TestMethod]
