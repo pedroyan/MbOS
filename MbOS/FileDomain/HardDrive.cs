@@ -1,4 +1,5 @@
 ﻿using MbOS.Common;
+using MbOS.Common.DataStructures;
 using MbOS.FileDomain.DataStructures;
 using MbOS.Interfaces;
 using System;
@@ -39,32 +40,7 @@ namespace MbOS.FileDomain {
 				throw new HardDriveOperationException($"Erro ao criar arquivo: Processo {file.OwnerPID} não existe");
 			}
 
-			bool hasInserted = false;
-
-			var firstFile = diskDrive.FirstOrDefault();
-			bool startsWithFile = firstFile != null && firstFile.StartIndex == 0;
-
-			//itera do começo até o penultimo elemento
-			for (int i = -1; i < diskDrive.Count; i++) {
-
-				if (i<0 && startsWithFile) {
-					continue;
-				}
-
-				var primeiroIndiceLivre = i<0 ? 0 : diskDrive[i].StartIndex + diskDrive[i].FileSize;
-
-				var holeSize = i != diskDrive.Count - 1 ?
-					diskDrive[i + 1].StartIndex - primeiroIndiceLivre
-					: (diskSize) - primeiroIndiceLivre;
-
-				if (file.FileSize <= holeSize) {
-					hasInserted = true;
-					file.StartIndex = primeiroIndiceLivre;
-					diskDrive.Insert(i + 1, file);
-					break;
-				}
-
-			}
+			var hasInserted = BlocoContiguo.FirstFit(file, diskDrive, diskSize);
 
 			if (!hasInserted) {
 				throw new HardDriveOperationException($"O processo {file.OwnerPID} não pode criar o arquivo {file.FileName} (falta de espaço).");
