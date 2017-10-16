@@ -4,6 +4,7 @@ using System.Text;
 
 namespace MbOS.Common.DataStructures {
 	public class BlocoContiguo {
+
 		public int StartIndex { get; set; }
 		public int FileSize { get; set; }
 

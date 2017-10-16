@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MbOS.FileDomain.DataStructures {
 	public class HardDriveEntry : BlocoContiguo {
+
 		public int? OwnerPID { get; set; }
 		public string FileName { get; set; }
 
