@@ -1,10 +1,16 @@
-﻿using MbOS.Interfaces;
+﻿using MbOS.Common;
+using MbOS.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace MbOS.Processes.ProcessManager {
 	public class ProcessManager : IProcessService {
+
+		public void Run() {
+			RegistrationService.RegisterInstance<IProcessService>(this); ;
+		}
+
 		public bool ExistsProcess(int id) {
 			return id < 5 && id != 2;
 		}

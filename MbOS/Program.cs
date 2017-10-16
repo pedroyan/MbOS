@@ -7,9 +7,12 @@ using MbOS.FileDomain;
 namespace MbOS {
 	class Program {
 		static void Main(string[] args) {
-			RegistrationService.RegisterInstance<IProcessService>(new ProcessManager());
+
+			var processes = new ProcessManager();
+			processes.Run();
+
 			var manager = new FileManager("files.txt");
-			manager.RunFileManager();
+			manager.Run();
 			Console.ReadKey();
 		}
 	}
