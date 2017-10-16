@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MbOS.Processes.ProcessManager {
+namespace MbOS.ProcessDomain.ProcessManager {
 	public class ProcessManager : IProcessService {
 
 		public void Run() {

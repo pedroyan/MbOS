@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Processes\DataStructures\" />
+    <Folder Include="ProcessDomain\DataStructures\" />
   </ItemGroup>
 
 </Project>
