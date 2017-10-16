@@ -2,13 +2,21 @@
 using MbOS.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace MbOS.ProcessDomain.ProcessManager {
 	public class ProcessManager : IProcessService {
 
+		StreamReader initializationFile;
+
+		public ProcessManager(string fileName) {
+			initializationFile = FileHelper.OpenFile(fileName);
+		}
+
 		public void Run() {
-			RegistrationService.RegisterInstance<IProcessService>(this); ;
+			RegistrationService.RegisterInstance<IProcessService>(this);
+			initializationFile.Dispose();
 		}
 
 		public bool ExistsProcess(int id) {

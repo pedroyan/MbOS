@@ -9,4 +9,13 @@
     <Folder Include="ProcessDomain\DataStructures\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\files.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\processes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

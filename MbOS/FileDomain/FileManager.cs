@@ -1,4 +1,5 @@
-﻿using MbOS.FileDomain.DataStructures;
+﻿using MbOS.Common;
+using MbOS.FileDomain.DataStructures;
 using MbOS.FileDomain.DataStructures.Instructions;
 using System;
 using System.Collections.Generic;
@@ -11,26 +12,14 @@ namespace MbOS.FileDomain {
 
 		private HardDrive hardDrive;
 		private int lineCount;
-		private StreamReader file;
+		private StreamReader initializationFile;
 
 		/// <summary>
 		/// Constroi uma instância de um file managar
 		/// </summary>
 		/// <param name="filename">Path para o arquivo (a partir do diretório do executável) de inicialização do disco</param>
 		public FileManager(string filename) {
-			var location = AppDomain.CurrentDomain.BaseDirectory;
-			try {
-				file = new StreamReader($"{location}\\{filename}");
-			} catch (FileNotFoundException) {
-				Console.WriteLine($"Erro ao ler arquivo: arquivo não encontrado no path de execução {location}");
-				throw;
-			} catch (DirectoryNotFoundException) {
-				Console.WriteLine($"Diretório do arquivo inválido: {location}");
-				throw;
-			} catch (Exception ex) {
-				Console.WriteLine($"Erro ao ler arquivo: {ex.Message}");
-				throw;
-			}
+			initializationFile = FileHelper.OpenFile(filename);
 		}
 
 		/// <summary>
@@ -38,9 +27,9 @@ namespace MbOS.FileDomain {
 		/// </summary>
 		public void Run() {
 			try {
-				hardDrive = InitializeHDD(file);
-				ExecuteInstructions(file);
-				file.Dispose();
+				hardDrive = InitializeHDD(initializationFile);
+				ExecuteInstructions(initializationFile);
+				initializationFile.Dispose();
 			} catch (FileFormatException ex) {
 				Console.WriteLine($"Arquivo inválido: {ex.Message}");
 				throw;
@@ -151,7 +140,7 @@ namespace MbOS.FileDomain {
 
 		private string GetNextLine() {
 			lineCount++;
-			return file.ReadLine();
+			return initializationFile.ReadLine();
 		}
 	}
 }
