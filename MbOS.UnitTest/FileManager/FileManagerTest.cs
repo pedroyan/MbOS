@@ -21,12 +21,12 @@ namespace MbOS.UnitTest.FileManager {
 			// Testa arquivos inicializados em setores inválidos
 			#region ValidSectors
 			var ListaArquivos = new List<HardDriveEntry>() {
-				new HardDriveEntry("Arquivo A",0,1){ StartSector = -1},
+				new HardDriveEntry("Arquivo A",0,1){ StartIndex = -1},
 			};
 			TestSetorInvalido(ListaArquivos, 2);
 
 			ListaArquivos = new List<HardDriveEntry>() {
-				new HardDriveEntry("Arquivo B",0,1){StartSector = 5}
+				new HardDriveEntry("Arquivo B",0,1){StartIndex = 5}
 			};
 			TestSetorInvalido(ListaArquivos, 5);
 			#endregion
@@ -39,21 +39,21 @@ namespace MbOS.UnitTest.FileManager {
 			TestEspacoEstourado(ListaArquivos, 5, deveFuncionar: true);
 
 			ListaArquivos = new List<HardDriveEntry>() {
-				new HardDriveEntry("A",0,1){StartSector = 0},
-				new HardDriveEntry("B",0,2){StartSector = 1},
-				new HardDriveEntry("C",0,2){StartSector = 3},
+				new HardDriveEntry("A",0,1){StartIndex = 0},
+				new HardDriveEntry("B",0,2){StartIndex = 1},
+				new HardDriveEntry("C",0,2){StartIndex = 3},
 			};
 			TestEspacoEstourado(ListaArquivos, 5, deveFuncionar: true);
 
 			ListaArquivos = new List<HardDriveEntry>() {
-				new HardDriveEntry("A",0,1){StartSector = 0},
-				new HardDriveEntry("B",0,2){StartSector = 1},
-				new HardDriveEntry("C",0,3){StartSector = 3},
+				new HardDriveEntry("A",0,1){StartIndex = 0},
+				new HardDriveEntry("B",0,2){StartIndex = 1},
+				new HardDriveEntry("C",0,3){StartIndex = 3},
 			};
 			TestEspacoEstourado(ListaArquivos, 5, deveFuncionar: false);
 
 			ListaArquivos = new List<HardDriveEntry>() {
-				new HardDriveEntry("A",0,6){StartSector = 0}
+				new HardDriveEntry("A",0,6){StartIndex = 0}
 			};
 			TestEspacoEstourado(ListaArquivos, 5, deveFuncionar: false);
 			#endregion
@@ -62,7 +62,7 @@ namespace MbOS.UnitTest.FileManager {
 			#region Overlap
 			ListaArquivos = new List<HardDriveEntry>() {
 				new HardDriveEntry("A",0,3),
-				new HardDriveEntry("B",0,1){StartSector = 2}
+				new HardDriveEntry("B",0,1){StartIndex = 2}
 			};
 
 			TestOverlap(ListaArquivos, 6, false);
@@ -76,9 +76,9 @@ namespace MbOS.UnitTest.FileManager {
 			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
 			var initializationList = new List<HardDriveEntry>() {
 				new HardDriveEntry("A",0,2),
-				new HardDriveEntry("B",0,3){StartSector = 5},
-				new HardDriveEntry("C",0,1){StartSector=8},
-				new HardDriveEntry("D",0,2){StartSector=10}
+				new HardDriveEntry("B",0,3){StartIndex = 5},
+				new HardDriveEntry("C",0,1){StartIndex=8},
+				new HardDriveEntry("D",0,2){StartIndex=10}
 			};
 
 			var hd = new HardDrive(13, initializationList);
@@ -129,9 +129,9 @@ namespace MbOS.UnitTest.FileManager {
 			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
 			var initializationList = new List<HardDriveEntry>() {
 				new HardDriveEntry("A",0,2),
-				new HardDriveEntry("B",1,3){StartSector = 5},
-				new HardDriveEntry("C",2,1){StartSector=8},
-				new HardDriveEntry("D",3,2){StartSector=10}
+				new HardDriveEntry("B",1,3){StartIndex = 5},
+				new HardDriveEntry("C",2,1){StartIndex=8},
+				new HardDriveEntry("D",3,2){StartIndex=10}
 			};
 
 			var hd = new HardDrive(13, initializationList);
@@ -163,7 +163,7 @@ namespace MbOS.UnitTest.FileManager {
 				var hd = new HardDrive(hdSize, initList);
 				Assert.Fail();
 			} catch (ArgumentOutOfRangeException ex) {
-				Assert.IsTrue(ex.ParamName == nameof(HardDriveEntry.StartSector));
+				Assert.IsTrue(ex.ParamName == nameof(HardDriveEntry.StartIndex));
 			}
 		}
 

@@ -1,13 +1,12 @@
-﻿using System;
+﻿using MbOS.Common.DataStructures;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace MbOS.FileDomain.DataStructures {
-	public class HardDriveEntry {
+	public class HardDriveEntry : BlocoContiguo {
 		public int? OwnerPID { get; set; }
 		public string FileName { get; set; }
-		public int StartSector { get; set; }
-		public int FileSize { get; set; }
 
 
 		/// <summary>
@@ -24,24 +23,6 @@ namespace MbOS.FileDomain.DataStructures {
 			OwnerPID = ownerPID;
 			FileName = nomeArquivo;
 			FileSize = fileSize;
-		}
-
-		/// <summary>
-		/// Verifica se o arquivo ja ocupa o espaço de um outro arquivo
-		/// </summary>
-		/// <param name="file">Arquivo a ser analisado</param>
-		/// <returns></returns>
-		public bool IntersectSpace(HardDriveEntry file) {
-			return StartSector <= file.StartSector && file.StartSector <= StartSector + FileSize - 1;
-		}
-
-		public string GetOccupiedBlocks() {
-			string toReturn = $"blocos {StartSector}";
-			for (int i = 1; i < FileSize; i++) {
-				var separador = i == FileSize - 1 ? " e " : ", ";
-				toReturn += $"{separador}{StartSector + i}";
-			}
-			return toReturn;
 		}
 	}
 }

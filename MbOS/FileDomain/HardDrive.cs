@@ -42,7 +42,7 @@ namespace MbOS.FileDomain {
 			bool hasInserted = false;
 
 			var firstFile = diskDrive.FirstOrDefault();
-			bool startsWithFile = firstFile != null && firstFile.StartSector == 0;
+			bool startsWithFile = firstFile != null && firstFile.StartIndex == 0;
 
 			//itera do começo até o penultimo elemento
 			for (int i = -1; i < diskDrive.Count; i++) {
@@ -51,15 +51,15 @@ namespace MbOS.FileDomain {
 					continue;
 				}
 
-				var primeiroIndiceLivre = i<0 ? 0 : diskDrive[i].StartSector + diskDrive[i].FileSize;
+				var primeiroIndiceLivre = i<0 ? 0 : diskDrive[i].StartIndex + diskDrive[i].FileSize;
 
 				var holeSize = i != diskDrive.Count - 1 ?
-					diskDrive[i + 1].StartSector - primeiroIndiceLivre
+					diskDrive[i + 1].StartIndex - primeiroIndiceLivre
 					: (diskSize) - primeiroIndiceLivre;
 
 				if (file.FileSize <= holeSize) {
 					hasInserted = true;
-					file.StartSector = primeiroIndiceLivre;
+					file.StartIndex = primeiroIndiceLivre;
 					diskDrive.Insert(i + 1, file);
 					break;
 				}
@@ -101,7 +101,7 @@ namespace MbOS.FileDomain {
 		/// </summary>
 		/// <param name="intializationList">Arquivos a serem inicializados</param>
 		private void InitilizeFiles(List<HardDriveEntry> intializationList) {
-			var orderedFiles = intializationList.OrderBy(f => f.StartSector);
+			var orderedFiles = intializationList.OrderBy(f => f.StartIndex);
 			foreach (var file in orderedFiles) {
 				InitializeFile(file);
 			}
@@ -113,8 +113,8 @@ namespace MbOS.FileDomain {
 		/// <param name="file">Arquivo a ser inicializado</param>
 		private void InitializeFile(HardDriveEntry file) {
 
-			if (file.StartSector >= diskSize || file.StartSector < 0) {
-				throw new ArgumentOutOfRangeException(nameof(file.StartSector), $"Arquivo {file.FileName} inicializado fora do disco. (Indice {file.StartSector})");
+			if (file.StartIndex >= diskSize || file.StartIndex < 0) {
+				throw new ArgumentOutOfRangeException(nameof(file.StartIndex), $"Arquivo {file.FileName} inicializado fora do disco. (Indice {file.StartIndex})");
 			}
 
 			var fileOnSpace = diskDrive.FirstOrDefault(f => f.IntersectSpace(file));
@@ -124,7 +124,7 @@ namespace MbOS.FileDomain {
 				);
 			}
 
-			if (file.StartSector + file.FileSize > diskSize) {
+			if (file.StartIndex + file.FileSize > diskSize) {
 				throw new ArgumentOutOfRangeException(nameof(file), $"Arquivo {file.FileName} está ultrapassando os limites do disco");
 			}
 

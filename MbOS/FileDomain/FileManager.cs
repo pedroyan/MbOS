@@ -98,7 +98,7 @@ namespace MbOS.FileDomain {
 				}
 
 				var entry = new HardDriveEntry(entryName, null, entrySize) {
-					StartSector = startSector
+					StartIndex = startSector
 				};
 				initializationList.Add(entry);
 			}
