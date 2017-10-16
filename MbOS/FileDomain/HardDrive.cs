@@ -10,8 +10,7 @@ using System.Text;
 namespace MbOS.FileDomain {
 	public class HardDrive {
 
-		private List<HardDriveEntry> diskDrive;
-		private int diskSize;
+		private BlockChain<HardDriveEntry> diskDrive;
 		private IProcessService processService = RegistrationService.Resolve<IProcessService>();
 		//public string HardDriveMap {
 		//	get {
@@ -20,10 +19,9 @@ namespace MbOS.FileDomain {
 		//}
 
 		public HardDrive(int size, List<HardDriveEntry> initialFiles) {
-			this.diskSize = size;
 
-			diskDrive = new List<HardDriveEntry>();
-			InitilizeFiles(initialFiles);
+			var initializedFiles = InitilizeFiles(initialFiles, size);
+			diskDrive = new BlockChain<HardDriveEntry>(initializedFiles, size);
 		}
 
 		/// <summary>
@@ -40,7 +38,7 @@ namespace MbOS.FileDomain {
 				throw new HardDriveOperationException($"Erro ao criar arquivo: Processo {file.OwnerPID} não existe");
 			}
 
-			var hasInserted = BlocoContiguo.FirstFit(file, diskDrive, diskSize);
+			var hasInserted = diskDrive.FirstFit(file);
 
 			if (!hasInserted) {
 				throw new HardDriveOperationException($"O processo {file.OwnerPID} não pode criar o arquivo {file.FileName} (falta de espaço).");
@@ -59,7 +57,7 @@ namespace MbOS.FileDomain {
 				throw new HardDriveOperationException($"Falha ao deletar arquivo: Processo de ID {PID} não existe");
 			}
 
-			var file = diskDrive.FirstOrDefault(f => f.FileName == fileName);
+			var file = diskDrive.Collection.FirstOrDefault(f => f.FileName == fileName);
 			if (file == null) {
 				throw new HardDriveOperationException($"Arquivo {fileName} não encontrado");
 			}
@@ -76,24 +74,32 @@ namespace MbOS.FileDomain {
 		/// Realiza a inicialização dos arquivos no disco
 		/// </summary>
 		/// <param name="intializationList">Arquivos a serem inicializados</param>
-		private void InitilizeFiles(List<HardDriveEntry> intializationList) {
+		/// <param name="maxSize">Tamnho máximo do disco</param>
+		private List<HardDriveEntry> InitilizeFiles(List<HardDriveEntry> intializationList, int maxSize) {
+
 			var orderedFiles = intializationList.OrderBy(f => f.StartIndex);
+			var toReturn = new List<HardDriveEntry>();
+
 			foreach (var file in orderedFiles) {
-				InitializeFile(file);
+				InitializeFile(file, toReturn, maxSize);
 			}
+
+			return toReturn;
 		}
 
 		/// <summary>
 		/// Realiza inicializa um arquivo no disco
 		/// </summary>
 		/// <param name="file">Arquivo a ser inicializado</param>
-		private void InitializeFile(HardDriveEntry file) {
+		/// <param name="list">Lista para inserção dos arquivos inicializado</param>
+		/// <param name="diskSize">Tamnho máximo do disco</param>
+		private void InitializeFile(HardDriveEntry file, List<HardDriveEntry> list, int diskSize) {
 
 			if (file.StartIndex >= diskSize || file.StartIndex < 0) {
 				throw new ArgumentOutOfRangeException(nameof(file.StartIndex), $"Arquivo {file.FileName} inicializado fora do disco. (Indice {file.StartIndex})");
 			}
 
-			var fileOnSpace = diskDrive.FirstOrDefault(f => f.IntersectSpace(file));
+			var fileOnSpace = list.FirstOrDefault(f => f.IntersectSpace(file));
 			if (fileOnSpace != null) {
 				throw new HardDriveOperationException(
 					$"O Arquivo {file.FileName} não pode ser adicionado pois o arquivo {fileOnSpace.FileName} já ocupa o setor apontado"
@@ -104,11 +110,11 @@ namespace MbOS.FileDomain {
 				throw new ArgumentOutOfRangeException(nameof(file), $"Arquivo {file.FileName} está ultrapassando os limites do disco");
 			}
 
-			diskDrive.Add(file);
+			list.Add(file);
 		}
 
 		public HardDriveEntry GetEntryAt(int index) {
-			return diskDrive[index];
+			return diskDrive.Collection.ElementAt(index);
 		}
 	}
 }
