@@ -20,13 +20,17 @@ namespace MbOS.MemoryDomain {
 		/// <param name="isRealTime">Indica se o processo passado é de tempo real</param>
 		/// <returns>O bloco alocado. Retorna nulo caso a operação falhe</returns>
 		public MemoryBlock AllocateMemory(MemoryBlock block, bool isRealTime) {
-			bool success = isRealTime ? RealTime.FirstFit(block) : User.FirstFit(block); ;
+			bool success = isRealTime ? RealTime.FirstFit(block) : User.FirstFit(block);
 
 			if (!success) {
 				return null;
 			}
 
 			return block;
+		}
+
+		public bool CanAllocate(MemoryBlock block, bool isRealTime) {
+			return isRealTime ? RealTime.CanFit(block.BlockSize) : User.CanFit(block.BlockSize);
 		}
 
 		public void DeallocateMemory(int PID, bool isRealTime) {

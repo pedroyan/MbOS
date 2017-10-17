@@ -80,21 +80,20 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// caso não seja necessária a execução de nenhum processo
 		/// </summary>
 		/// <returns></returns>
-		public Process GetNextProcess() {
+			public Process GetNextProcess() {
 
-			var prioridadesAvaliadas = RunningProcess == null ? prioridades
-				: prioridades.Where(p => p.Key < RunningProcess.Priority);
+				var prioridadesAvaliadas = RunningProcess == null ? prioridades
+					: prioridades.Where(p => p.Key < RunningProcess.Priority);
 
-			foreach (var Prioridade in prioridadesAvaliadas) {
-				var naoConcluidos = Prioridade.Where(p => !p.Concluido);
-				var realTime = Prioridade.Key == 0;
-				foreach (var processo in naoConcluidos) {
-					if (memoryManager.AllocateMemory(processo.MemoryUsed, realTime)) {
-
+				foreach (var Prioridade in prioridadesAvaliadas) {
+					var naoConcluidos = Prioridade.Where(p => !p.Concluido && p.InitializationTime == 0);
+					var realTime = Prioridade.Key == 0;
+					foreach (var processo in naoConcluidos) {
+						//Valida recursos disponiveis
 					}
 				}
+				throw new NotImplementedException();
 			}
-		}
 
 	}
 }

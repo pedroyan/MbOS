@@ -35,8 +35,16 @@ namespace MbOS.Common.DataStructures {
 		/// <returns>Uma flag indicando se a inserção foi bem sucedida</returns>
 		public bool FirstFit(T element){
 
-			bool hasInserted = false;
+			var result = CanFitDetailed(element.BlockSize);
+			if (result.CanFit) {
+				element.StartIndex = result.PrimeiroIndice ;
+				list.Insert(result.Index + 1, element);
+			}
+			 
+			return result.CanFit;
+		}
 
+		private CanFitResult CanFitDetailed(int size) {
 			var firstFile = list.FirstOrDefault();
 			bool startsWithFile = firstFile != null && firstFile.StartIndex == 0;
 
@@ -53,20 +61,33 @@ namespace MbOS.Common.DataStructures {
 					list[i + 1].StartIndex - primeiroIndiceLivre
 					: (MaxSize) - primeiroIndiceLivre;
 
-				if (element.BlockSize <= holeSize) {
-					hasInserted = true;
-					element.StartIndex = primeiroIndiceLivre;
-					list.Insert(i + 1, element);
-					break;
+				if (size <= holeSize) {
+					return new CanFitResult {
+						Index = i,
+						CanFit = true,
+						PrimeiroIndice = primeiroIndiceLivre
+					};
 				}
 
 			}
-			 
-			return hasInserted;
+
+			return new CanFitResult {
+				CanFit = false,
+			}; 
+		}
+
+		public bool CanFit(int size) {
+			return CanFitDetailed(size).CanFit;
 		}
 
 		public bool Remove(T element) {
 			return list.Remove(element);
 		}
+	}
+
+	public struct CanFitResult {
+		public int Index { get; set; }
+		public int PrimeiroIndice { get; set; }
+		public bool CanFit { get; set; }
 	}
 }

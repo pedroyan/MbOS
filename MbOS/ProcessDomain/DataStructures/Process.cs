@@ -9,9 +9,9 @@ namespace MbOS.ProcessDomain.DataStructures {
 		public int PID { get; set; }
 
 		/// <summary>
-		/// Quantos ticks para a inicialização
+		/// Quantos ticks restantes para a inicialização
 		/// </summary>
-		public int InitializationTime { get; private set; }
+		public int InitializationTime { get; set; }
 
 		/// <summary>
 		/// Ticks para concluir o processamento
