@@ -106,7 +106,7 @@ namespace MbOS.FileDomain {
 				);
 			}
 
-			if (file.StartIndex + file.FileSize > diskSize) {
+			if (file.StartIndex + file.BlockSize > diskSize) {
 				throw new ArgumentOutOfRangeException(nameof(file), $"Arquivo {file.FileName} está ultrapassando os limites do disco");
 			}
 

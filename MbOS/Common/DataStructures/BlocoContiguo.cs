@@ -7,7 +7,7 @@ namespace MbOS.Common.DataStructures {
 	public class BlocoContiguo {
 
 		public int StartIndex { get; set; }
-		public int FileSize { get; set; }
+		public int BlockSize { get; set; }
 
 		/// <summary>
 		/// Verifica se o arquivo ja ocupa o espaço de um outro arquivo
@@ -15,14 +15,17 @@ namespace MbOS.Common.DataStructures {
 		/// <param name="block">bloco a ser analisado</param>
 		/// <returns></returns>
 		public bool IntersectSpace(BlocoContiguo block) {
-			return StartIndex <= block.StartIndex && block.StartIndex <= StartIndex + FileSize - 1;
+			return StartIndex <= block.StartIndex && block.StartIndex <= StartIndex + BlockSize - 1;
 		}
 
+		public BlocoContiguo(int tamanho) {
+			BlockSize = tamanho;
+		}
 
 		public string GetOccupiedBlocks() {
 			string toReturn = $"blocos {StartIndex}";
-			for (int i = 1; i < FileSize; i++) {
-				var separador = i == FileSize - 1 ? " e " : ", ";
+			for (int i = 1; i < BlockSize; i++) {
+				var separador = i == BlockSize - 1 ? " e " : ", ";
 				toReturn += $"{separador}{StartIndex + i}";
 			}
 			return toReturn;

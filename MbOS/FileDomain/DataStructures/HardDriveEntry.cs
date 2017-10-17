@@ -16,14 +16,13 @@ namespace MbOS.FileDomain.DataStructures {
 		/// <param name="nomeArquivo">Nome do Arquivo a ser criado</param>
 		/// <param name="ownerPID">Processo criador do arquivo. Nulo quando o arquivo foi inicializado no disco</param>
 		/// <param name="fileSize">Tamannho do arquivo</param>
-		public HardDriveEntry(string nomeArquivo,int? ownerPID, int fileSize) {
+		public HardDriveEntry(string nomeArquivo,int? ownerPID, int fileSize) : base(fileSize) {
 			if (fileSize < 1) {
 				throw new ArgumentOutOfRangeException(nameof(fileSize), "O arquivo deve ocupar pelo menos um bloco");
 			}
 
 			OwnerPID = ownerPID;
 			FileName = nomeArquivo;
-			FileSize = fileSize;
 		}
 	}
 }

@@ -47,13 +47,13 @@ namespace MbOS.Common.DataStructures {
 					continue;
 				}
 
-				var primeiroIndiceLivre = i < 0 ? 0 : list[i].StartIndex + list[i].FileSize;
+				var primeiroIndiceLivre = i < 0 ? 0 : list[i].StartIndex + list[i].BlockSize;
 
 				var holeSize = i != list.Count - 1 ?
 					list[i + 1].StartIndex - primeiroIndiceLivre
 					: (MaxSize) - primeiroIndiceLivre;
 
-				if (element.FileSize <= holeSize) {
+				if (element.BlockSize <= holeSize) {
 					hasInserted = true;
 					element.StartIndex = primeiroIndiceLivre;
 					list.Insert(i + 1, element);
@@ -61,7 +61,7 @@ namespace MbOS.Common.DataStructures {
 				}
 
 			}
-
+			 
 			return hasInserted;
 		}
 
