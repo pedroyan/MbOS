@@ -11,17 +11,22 @@ namespace MbOS.ProcessDomain.DataStructures {
 		/// <summary>
 		/// Quantos ticks para a inicialização
 		/// </summary>
-		public int InitializationTime { get; set; }
+		public int InitializationTime { get; private set; }
 
 		/// <summary>
 		/// Ticks para concluir o processamento
 		/// </summary>
-		public int ProcessingTime { get; set; }
+		public int ProcessingTime { get; private set; }
+
+		/// <summary>
+		/// Quantos ticks foram executados
+		/// </summary>
+		public int TicksRan { get; private set; }
 
 		/// <summary>
 		/// Quanto menor o valor, maior a prioridade
 		/// </summary>
-		public int Priority { get; set; }
+		public int Priority { get; private set; }
 
 		/// <summary>
 		/// Espaço da memória alocado
@@ -45,6 +50,43 @@ namespace MbOS.ProcessDomain.DataStructures {
 		public bool UsingPrinter { get { return PrinterId > 0; } }
 
 		public bool UsingSata { get { return SataID > 0; } }
+
+		public bool Concluido { get { return TicksRan >= ProcessingTime; } }
+
+		/// <summary>
+		/// Printa na tela a mensagem de execução do processo
+		/// </summary>
+		public void PrintRunningMessage() {
+
+			if (TicksRan == 1) {
+				Console.WriteLine($"P{PID} STARTED");
+			} else {
+				Console.WriteLine($"P{PID} RESTARTED");
+			}
+
+			Console.WriteLine($"P{PID} instruction {TicksRan}");
+
+			if (Concluido) {
+				Console.WriteLine($"P{PID} return SIGINT");
+			}
+		}
+
+		/// <summary>
+		/// Printa na tela a mensagem de preempção
+		/// </summary>
+		public void PrintPreemptionMessage() {
+
+		}
+
+		public void Promote() {
+			PrintPreemptionMessage();
+			Priority--;
+		}
+
+		public void Run() {
+			TicksRan++;
+			PrintRunningMessage();
+		}
 
 	}
 }
