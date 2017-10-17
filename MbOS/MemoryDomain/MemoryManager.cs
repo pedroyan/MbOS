@@ -19,17 +19,14 @@ namespace MbOS.MemoryDomain {
 		/// <param name="memorySize">Tamanho da memória alocada</param>
 		/// <param name="isRealTime">Indica se o processo passado é de tempo real</param>
 		/// <returns>O bloco alocado. Retorna nulo caso a operação falhe</returns>
-		public MemoryBlock AllocateMemory(int PID, int memorySize, bool isRealTime) {
-			var memoryChunk = new MemoryBlock(memorySize) {
-				OwnerPID = PID,
-			};
-			bool success = isRealTime ? RealTime.FirstFit(memoryChunk) : User.FirstFit(memoryChunk); ;
+		public MemoryBlock AllocateMemory(MemoryBlock block, bool isRealTime) {
+			bool success = isRealTime ? RealTime.FirstFit(block) : User.FirstFit(block); ;
 
 			if (!success) {
 				return null;
 			}
 
-			return memoryChunk;
+			return block;
 		}
 
 		public void DeallocateMemory(int PID, bool isRealTime) {
