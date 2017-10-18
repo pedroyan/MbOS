@@ -45,6 +45,7 @@ namespace MbOS.FileDomain {
 			while ((line = GetNextLine()) != null) {
 				var inst = ParseInstruction(line);
 				try {
+					//Testes podem ser feitos por injeção de dependência
 					inst.Execute(hardDrive,i);
 				} catch (HardDriveOperationException ex) {
 					Console.WriteLine($"Operacao {i} => Falha");

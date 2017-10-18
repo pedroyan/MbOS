@@ -54,9 +54,10 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		}
 
 		public void Preempcao(Process novoProcesso) {
-			if (RunningProcess != novoProcesso) {
+			if (RunningProcess != null && RunningProcess != novoProcesso) {
 				RunningProcess.Promote();
 			}
+
 			RunningProcess = novoProcesso;
 		}
 
@@ -64,6 +65,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 			if (RunningProcess != null) {
 				RunningProcess.Run();
+
 				if (RunningProcess.Concluido) {
 					RunningProcess = null;
 					processosCompletos++;
