@@ -32,6 +32,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 		int processosCount;
 		int processosCompletos;
+		int tickCount;
 
 		public ProcessScheduler(List<Process> processes) {
 
@@ -75,6 +76,8 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			foreach (var proc in Processos) {
 				proc.InitializationTime--;
 			}
+
+			tickCount++;
 		}
 
 		/// <summary>
@@ -82,20 +85,21 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// caso não seja necessária a execução de nenhum processo
 		/// </summary>
 		/// <returns></returns>
-			public Process GetNextProcess() {
+		public Process GetNextProcess() {
 
-				var prioridadesAvaliadas = RunningProcess == null ? prioridades
-					: prioridades.Where(p => p.Key < RunningProcess.Priority);
+			var processosPrioritarios = RunningProcess == null ? prioridades
+				: prioridades.Where(p => p.Key < RunningProcess.Priority);
 
-				foreach (var Prioridade in prioridadesAvaliadas) {
-					var naoConcluidos = Prioridade.Where(p => !p.Concluido && p.InitializationTime == 0);
-					var realTime = Prioridade.Key == 0;
-					foreach (var processo in naoConcluidos) {
-						//Valida recursos disponiveis
-					}
+			foreach (var grupoPrioridade in processosPrioritarios) {
+				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0);
+				var realTime = grupoPrioridade.Key == 0;
+				foreach (var processo in readyToRun) {
+					//Valida recursos disponiveis
 				}
-				throw new NotImplementedException();
 			}
+
+			return null;
+		}
 
 	}
 }
