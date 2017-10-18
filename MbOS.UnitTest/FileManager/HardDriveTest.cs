@@ -9,7 +9,7 @@ using System.Text;
 
 namespace MbOS.UnitTest.FileManager {
 	[TestClass]
-	public class FileManagerTest {
+	public class HardDriveTest {
 		[TestInitialize]
 		public void Initialization() {
 			RegistrationService.RegisterInstance<IProcessService>(new MockProcessService());
