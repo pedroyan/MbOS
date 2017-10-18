@@ -34,6 +34,11 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		int processosCompletos;
 		int tickCount;
 
+		/// <summary>
+		/// Constrói uma instância de um process scheduler
+		/// com os processos <paramref name="processes"/> passados
+		/// </summary>
+		/// <param name="processes">Processos que serão gerenciados pelo escalonador</param>
 		public ProcessScheduler(List<Process> processes) {
 
 			if (processes.Count > 1000) {
@@ -61,6 +66,9 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		public void Preempcao(Process novoProcesso) {
 			if (RunningProcess != null && RunningProcess != novoProcesso) {
 				RunningProcess.Promote();
+
+				//reorganiza os processos
+				prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
 			}
 
 			RunningProcess = novoProcesso;
