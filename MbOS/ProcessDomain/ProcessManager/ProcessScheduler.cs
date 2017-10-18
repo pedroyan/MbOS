@@ -36,6 +36,10 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 		public ProcessScheduler(List<Process> processes) {
 
+			if (processes.Count > 1000) {
+				throw new ArgumentException("Não é possível entrar com mais de 1000 processos");
+			}
+
 			processosCount = processes.Count;
 
 			memoryManager = new MemoryManager();
