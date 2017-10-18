@@ -69,7 +69,42 @@ namespace MbOS.ResourcesDomain {
 		/// <param name="PID">Processo que deseja alocar o recurso</param>
 		/// <param name="resource">Recurso pedido</param>
 		public void Allocate(int PID, ResourceAllocationId resource) {
+			bool success = false;
+			switch (resource) {
+				case ResourceAllocationId.Scanner:
+					success = Allocate(PID, ref Scanner);
+					break;
+				case ResourceAllocationId.Impressora1:
+					success = Allocate(PID, ref Impressora1);
+					break;
+				case ResourceAllocationId.Impressora2:
+					success = Allocate(PID, ref Impressora2);
+					break;
+				case ResourceAllocationId.Modem:
+					success = Allocate(PID, ref Modem);
+					break;
+				case ResourceAllocationId.SATA1:
+					success = Allocate(PID, ref SATA1);
+					break;
+				case ResourceAllocationId.SATA2:
+					success = Allocate(PID, ref SATA2);
+					break;
+				default:
+					break;
+			}
 
+			if (!success) {
+				throw new ArgumentException($"Não foi possível alocar o recurso {resource.ToString()} para o processo {PID}");
+			}
+		}
+
+		private bool Allocate(int PID,ref int? resource) {
+			if (!CanAllocate(PID,resource)) {
+				return false;
+			}
+
+			resource = PID;
+			return true;
 		}
 		#endregion
 
