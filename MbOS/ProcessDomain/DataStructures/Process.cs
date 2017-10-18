@@ -1,4 +1,5 @@
 ﻿using MbOS.MemoryDomain.DataStructures;
+using MbOS.ResourcesDomain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,12 +37,12 @@ namespace MbOS.ProcessDomain.DataStructures {
 		/// <summary>
 		/// Id do scanner utilizado. 0 quando o processo não requsita o scanner
 		/// </summary>
-		public int PrinterId { get; set; }
+		public PrinterEnum PrinterId { get; set; }
 
 		/// <summary>
 		/// Id do dispositivo Sata. 0 quando o processo não requisita nenhum dispositivo
 		/// </summary>
-		public int SataID { get; set; }
+		public SataEnum SataID { get; set; }
 
 		public bool UsingScanner { get; set; }
 
