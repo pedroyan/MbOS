@@ -108,6 +108,27 @@ namespace MbOS.ResourcesDomain {
 		}
 		#endregion
 
+		#region Deallocation
+		/// <summary>
+		/// Libera todos os recursos alocados, se houverem, para o processo de ID<paramref name="PID"/>
+		/// </summary>
+		/// <param name="PID">ID do processo liberado</param>
+		public void FreeResources(int PID) {
+			FreeResource(PID, ref Impressora1);
+			FreeResource(PID, ref Impressora2);
+			FreeResource(PID, ref Modem);
+			FreeResource(PID, ref SATA1);
+			FreeResource(PID, ref SATA2);
+			FreeResource(PID, ref Scanner);
+		}
+
+		private void FreeResource(int PID, ref int? resource) {
+			if (PID == resource) {
+				resource = null;
+			}
+		}
+		#endregion
+
 
 	}
 
