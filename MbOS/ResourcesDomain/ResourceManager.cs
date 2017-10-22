@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MbOS.ResourcesDomain {
 	public class ResourceManager {
+
 		private int? Scanner;
 
 		private int? Impressora1;
@@ -89,8 +90,35 @@ namespace MbOS.ResourcesDomain {
 		#endregion
 
 		#region Allocation
-		public bool Allocate(Process process) {
 
+		/// <summary>
+		/// Aloca os recursos pedidos por um processo <paramref name="process"/>
+		/// </summary>
+		/// <param name="process">Processo que solicita os recursos</param>
+		public void Allocate(Process process) {
+			if (process.UsingScanner) {
+				Allocate(process.PID, ResourceAllocationId.Scanner);
+			}
+
+			if (process.UsingModem) {
+				Allocate(process.PID, ResourceAllocationId.Modem);
+			}
+
+			if (process.UsingPrinter) {
+				if (process.PrinterId == PrinterEnum.Printer1) {
+					Allocate(process.PID, ResourceAllocationId.Impressora1);
+				} else {
+					Allocate(process.PID, ResourceAllocationId.Impressora2);
+				}
+			}
+
+			if (process.UsingSata) {
+				if (process.SataID == SataEnum.Sata1) {
+					Allocate(process.PID, ResourceAllocationId.SATA1);
+				} else {
+					Allocate(process.PID, ResourceAllocationId.SATA2);
+				}
+			}
 		}
 
 		/// <summary>

@@ -42,6 +42,11 @@ namespace MbOS.MemoryDomain {
 			return isRealTime ? RealTime.CanFit(size) : User.CanFit(size);
 		}
 
+		/// <summary>
+		/// Desaloca a memória para o processo id <paramref name="PID"/>
+		/// </summary>
+		/// <param name="PID">Id do processo a ter a memória desalocada</param>
+		/// <param name="isRealTime">Flag indicando se o processo é de tempo real</param>
 		public void DeallocateMemory(int PID, bool isRealTime) {
 			var block = isRealTime ? RealTime.Collection.FirstOrDefault(m => m.OwnerPID == PID) 
 				: User.Collection.FirstOrDefault(m => m.OwnerPID == PID);

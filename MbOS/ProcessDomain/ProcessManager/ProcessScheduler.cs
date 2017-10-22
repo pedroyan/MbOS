@@ -113,10 +113,17 @@ namespace MbOS.ProcessDomain.ProcessManager {
 					if (memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime) 
 						&& resourceManager.CanAllocateResources(processo)) {
 
+						// aloca memoria
+						memoryManager.AllocateMemory(processo.MemoryUsed, realTime);
+
+						// aloca recurso
+						resourceManager.Allocate(processo);
+
+						//retorna para execução
+						return processo;
 					}
 				}
 			}
-
 			return null;
 		}
 
