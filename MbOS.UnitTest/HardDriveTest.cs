@@ -2,12 +2,13 @@
 using MbOS.FileDomain;
 using MbOS.FileDomain.DataStructures;
 using MbOS.Interfaces;
+using MbOS.UnitTest.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MbOS.UnitTest.FileManager {
+namespace MbOS.UnitTest {
 	[TestClass]
 	public class HardDriveTest {
 		[TestInitialize]

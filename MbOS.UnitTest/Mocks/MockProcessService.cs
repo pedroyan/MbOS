@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MbOS.UnitTest.FileManager {
+namespace MbOS.UnitTest.Mocks {
 	class MockProcessService : IProcessService {
 		public bool ExistsProcess(int id) {
 			return id < 5;
