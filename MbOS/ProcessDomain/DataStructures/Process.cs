@@ -9,10 +9,14 @@ namespace MbOS.ProcessDomain.DataStructures {
 
 		public int PID { get; set; }
 
+		private int _InitializationTime;
 		/// <summary>
 		/// Quantos ticks restantes para a inicialização
 		/// </summary>
-		public int InitializationTime { get; set; }
+		public int InitializationTime {
+			get { return _InitializationTime; }
+			set { _InitializationTime = value > 0 ? value : 0; }
+		}
 
 		/// <summary>
 		/// Ticks para concluir o processamento
@@ -61,8 +65,6 @@ namespace MbOS.ProcessDomain.DataStructures {
 
 			if (TicksRan == 1) {
 				Console.WriteLine($"P{PID} STARTED");
-			} else {
-				Console.WriteLine($"P{PID} RESTARTED");
 			}
 
 			Console.WriteLine($"P{PID} instruction {TicksRan}");

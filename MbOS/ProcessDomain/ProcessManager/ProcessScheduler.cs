@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using MbOS.MemoryDomain;
+using MbOS.ResourcesDomain;
 
 namespace MbOS.ProcessDomain.ProcessManager {
 	/// <summary>
@@ -29,6 +30,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// Gerenciador de memória
 		/// </summary>
 		private MemoryManager memoryManager;
+		private ResourceManager resourceManager;
 
 		int processosCount;
 		int processosCompletos;
@@ -48,6 +50,8 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			processosCount = processes.Count;
 
 			memoryManager = new MemoryManager();
+			resourceManager = new ResourceManager();
+
 			Processos = processes ?? new List<Process>();
 
 			prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
@@ -103,10 +107,13 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				: prioridades.Where(p => p.Key < RunningProcess.Priority);
 
 			foreach (var grupoPrioridade in processosPrioritarios) {
-				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0);
+				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0).OrderBy(p=>p.PID);
 				var realTime = grupoPrioridade.Key == 0;
 				foreach (var processo in readyToRun) {
-					//Valida recursos disponiveis
+					if (memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime) 
+						&& resourceManager.CanAllocateResources(processo)) {
+
+					}
 				}
 			}
 

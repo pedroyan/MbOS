@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MbOS.ProcessDomain.DataStructures;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,6 +16,31 @@ namespace MbOS.ResourcesDomain {
 		private int? SATA2;
 
 		#region Checking
+
+		/// <summary>
+		/// Verifica se é possivel alocar todos os recursos 
+		/// pedidos por um processo <paramref name="process"/>
+		/// </summary>
+		public bool CanAllocateResources(Process process) {
+			if (process.UsingModem && !CanAllocateModem(process.PID)) {
+				return false;
+			}
+
+			if (process.UsingPrinter && !CanAllocatePrinter(process.PID,process.PrinterId)) {
+				return false;
+			}
+
+			if (process.UsingSata && !CanAllocateSata(process.PID,process.SataID)) {
+				return false;
+			}
+
+			if (process.UsingScanner && !CanAllocateScanner(process.PID)) {
+				return false;
+			}
+
+			return true;
+		}
+
 		/// <summary>
 		/// Valida se o processo de id <paramref name="PID"/> pode alocar impressora <paramref name="printer"/>
 		/// </summary>
@@ -63,6 +89,10 @@ namespace MbOS.ResourcesDomain {
 		#endregion
 
 		#region Allocation
+		public bool Allocate(Process process) {
+
+		}
+
 		/// <summary>
 		/// Realiza a alocação do recurso passado
 		/// </summary>

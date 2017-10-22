@@ -29,8 +29,17 @@ namespace MbOS.MemoryDomain {
 			return block;
 		}
 
-		public bool CanAllocate(MemoryBlock block, bool isRealTime) {
-			return isRealTime ? RealTime.CanFit(block.BlockSize) : User.CanFit(block.BlockSize);
+		/// <summary>
+		/// Verifica se é possivel alocar um bloco de memória de tamanho <paramref name="size"/>
+		/// </summary>
+		/// <param name="size">Tamanho do bloco</param>
+		/// <param name="isRealTime">
+		/// Indica se o processo que vai realizar a alocação
+		/// é um processo de Tempo Real
+		/// </param>
+		/// <returns></returns>
+		public bool CanAllocate(int size, bool isRealTime) {
+			return isRealTime ? RealTime.CanFit(size) : User.CanFit(size);
 		}
 
 		public void DeallocateMemory(int PID, bool isRealTime) {
