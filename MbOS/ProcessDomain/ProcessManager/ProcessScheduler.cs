@@ -67,7 +67,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			}
 		}
 
-		public void Preempcao(Process novoProcesso) {
+		private void Preempcao(Process novoProcesso) {
 			if (RunningProcess != null && RunningProcess != novoProcesso) {
 				RunningProcess.Promote();
 
@@ -78,14 +78,13 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			RunningProcess = novoProcesso;
 		}
 
-		public void TickClock() {
+		private void TickClock() {
 
 			if (RunningProcess != null) {
 				RunningProcess.Run();
 
 				if (RunningProcess.Concluido) {
-					RunningProcess = null;
-					processosCompletos++;
+					FinishProcess(RunningProcess);
 				}
 			}
 
@@ -96,12 +95,20 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			tickCount++;
 		}
 
+		private void FinishProcess(Process process) {
+			memoryManager.DeallocateMemory(process.PID, process.Priority == 0);
+			resourceManager.FreeResources(process.PID);
+
+			RunningProcess = null;
+			processosCompletos++;
+		}
+
 		/// <summary>
 		/// Retorna qual processo deve ser executado á seguir. Devolve nulo
 		/// caso não seja necessária a execução de nenhum processo
 		/// </summary>
 		/// <returns></returns>
-		public Process GetNextProcess() {
+		private Process GetNextProcess() {
 
 			var processosPrioritarios = RunningProcess == null ? prioridades
 				: prioridades.Where(p => p.Key < RunningProcess.Priority);
