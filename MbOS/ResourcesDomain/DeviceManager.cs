@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MbOS.ResourcesDomain {
-	public class ResourceManager {
+	public class DeviceManager {
 
 		private int? Scanner;
 
@@ -22,7 +22,7 @@ namespace MbOS.ResourcesDomain {
 		/// Verifica se é possivel alocar todos os recursos 
 		/// pedidos por um processo <paramref name="process"/>
 		/// </summary>
-		public bool CanAllocateResources(Process process) {
+		public bool CanAllocateDevices(Process process) {
 			if (process.UsingModem && !CanAllocateModem(process.PID)) {
 				return false;
 			}
@@ -92,9 +92,9 @@ namespace MbOS.ResourcesDomain {
 		#region Allocation
 
 		/// <summary>
-		/// Aloca os recursos pedidos por um processo <paramref name="process"/>
+		/// Aloca os dispositivos pedidos por um processo <paramref name="process"/>
 		/// </summary>
-		/// <param name="process">Processo que solicita os recursos</param>
+		/// <param name="process">Processo que solicita os dispositivos</param>
 		public void Allocate(Process process) {
 			if (process.UsingScanner) {
 				Allocate(process.PID, ResourceAllocationId.Scanner);
@@ -122,10 +122,10 @@ namespace MbOS.ResourcesDomain {
 		}
 
 		/// <summary>
-		/// Realiza a alocação do recurso passado
+		/// Realiza a alocação do dispositivo passado
 		/// </summary>
 		/// <param name="PID">Processo que deseja alocar o recurso</param>
-		/// <param name="resource">Recurso pedido</param>
+		/// <param name="resource">Dispositivo requerido</param>
 		public void Allocate(int PID, ResourceAllocationId resource) {
 			bool success = false;
 			switch (resource) {
@@ -168,7 +168,7 @@ namespace MbOS.ResourcesDomain {
 
 		#region Deallocation
 		/// <summary>
-		/// Libera todos os recursos alocados, se houverem, para o processo de ID<paramref name="PID"/>
+		/// Libera todos os dispositivos alocados, se houverem, para o processo de ID<paramref name="PID"/>
 		/// </summary>
 		/// <param name="PID">ID do processo liberado</param>
 		public void FreeResources(int PID) {

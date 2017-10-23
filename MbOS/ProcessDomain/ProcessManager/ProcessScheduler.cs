@@ -30,7 +30,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// Gerenciador de memória
 		/// </summary>
 		private MemoryManager memoryManager;
-		private ResourceManager resourceManager;
+		private DeviceManager deviceManager;
 
 		int processosCount;
 		int processosCompletos;
@@ -50,7 +50,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			processosCount = processes.Count;
 
 			memoryManager = new MemoryManager();
-			resourceManager = new ResourceManager();
+			deviceManager = new DeviceManager();
 
 			Processos = processes ?? new List<Process>();
 
@@ -97,7 +97,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 		private void FinishProcess(Process process) {
 			memoryManager.DeallocateMemory(process.PID, process.Priority == 0);
-			resourceManager.FreeResources(process.PID);
+			deviceManager.FreeResources(process.PID);
 
 			RunningProcess = null;
 			processosCompletos++;
@@ -118,13 +118,13 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				var realTime = grupoPrioridade.Key == 0;
 				foreach (var processo in readyToRun) {
 					if (memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime) 
-						&& resourceManager.CanAllocateResources(processo)) {
+						&& deviceManager.CanAllocateDevices(processo)) {
 
 						// aloca memoria
 						memoryManager.AllocateMemory(processo.MemoryUsed, realTime);
 
 						// aloca recurso
-						resourceManager.Allocate(processo);
+						deviceManager.Allocate(processo);
 
 						//retorna para execução
 						return processo;

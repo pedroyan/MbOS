@@ -9,7 +9,7 @@ namespace MbOS.UnitTest {
 	public	class ResourceManagerTest {
 		[TestMethod]
 		public void SingleResourceAllocationTest() {
-			var manager = new ResourceManager();
+			var manager = new DeviceManager();
 
 			//Processo 3 aloca um modem
 			manager.Allocate(3, ResourceAllocationId.Modem);
@@ -29,7 +29,7 @@ namespace MbOS.UnitTest {
 
 		[TestMethod]
 		public void MultipleResourceAllocationTest() {
-			var manager = new ResourceManager();
+			var manager = new DeviceManager();
 
 			manager.Allocate(3, ResourceAllocationId.Impressora1);
 			manager.Allocate(3, ResourceAllocationId.SATA2);
@@ -40,7 +40,7 @@ namespace MbOS.UnitTest {
 
 		[TestMethod]
 		public void DeallocationTest() {
-			var manager = new ResourceManager();
+			var manager = new DeviceManager();
 
 			manager.Allocate(1, ResourceAllocationId.Impressora1);
 			manager.Allocate(1, ResourceAllocationId.Impressora2);
