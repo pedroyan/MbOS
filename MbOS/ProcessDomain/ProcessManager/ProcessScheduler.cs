@@ -95,13 +95,13 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				Console.WriteLine($"\t time: {process.ProcessingTime}");
 
 				var PrinterIdMessage = process.UsingPrinter ? $" - Printer Id {(int)process.PrinterId}" : "";
-				Console.WriteLine($"\t Using printer: {process.UsingPrinter}{PrinterIdMessage}");
+				Console.WriteLine($"\t Using Printer? {process.UsingPrinter}{PrinterIdMessage}");
 
-				Console.WriteLine($"\t scanner: {process.UsingScanner}");
-				Console.WriteLine($"\t modem: {process.UsingModem}");
+				Console.WriteLine($"\t Using Scanner? {process.UsingScanner}");
+				Console.WriteLine($"\t Using Modem? {process.UsingModem}");
 
 				var sataIdMessage = process.UsingSata ? $" - Sata Id {(int)process.SataID}" : "";
-				Console.WriteLine($"\t drive: {process.UsingSata}{sataIdMessage}");
+				Console.WriteLine($"\t Using SATA? {process.UsingSata}{sataIdMessage}");
 			}
 
 			Console.WriteLine($"\nprocess {process.PID} =>");
