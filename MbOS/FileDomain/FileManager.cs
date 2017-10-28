@@ -13,6 +13,7 @@ namespace MbOS.FileDomain {
 		private HardDrive hardDrive;
 		private int lineCount;
 		private StreamReader initializationFile;
+		private string fileName;
 
 		/// <summary>
 		/// Constroi uma instância de um file managar
@@ -20,6 +21,7 @@ namespace MbOS.FileDomain {
 		/// <param name="filename">Path para o arquivo (a partir do diretório do executável) de inicialização do disco</param>
 		public FileManager(string filename) {
 			initializationFile = FileHelper.OpenFile(filename);
+			fileName = filename;
 		}
 
 		/// <summary>
@@ -31,10 +33,10 @@ namespace MbOS.FileDomain {
 				ExecuteInstructions(initializationFile);
 				initializationFile.Dispose();
 			} catch (FileFormatException ex) {
-				Console.WriteLine($"Arquivo inválido: {ex.Message}");
+				Console.WriteLine($"Arquivo {fileName} inválido: {ex.Message}");
 				throw;
 			} catch (Exception ex) {
-				Console.WriteLine($"Erro ao ler arquivo: {ex.Message}");
+				Console.WriteLine($"Erro ao ler arquivo {fileName}: {ex.Message}");
 				throw;
 			}
 		}

@@ -7,6 +7,19 @@ using System.Text;
 namespace MbOS.ProcessDomain.DataStructures {
 	public class Process {
 
+		public Process(int PID, int initTime, int priority, int processingTime, 
+			int memoryBlocks, PrinterEnum printerId, bool useScanner, bool useModem, SataEnum sataId) {
+			this.PID = PID;
+			InitializationTime = initTime;
+			Priority = priority;
+			ProcessingTime = processingTime;
+			MemoryUsed = new MemoryBlock(memoryBlocks);
+			PrinterId = printerId;
+			this.UsingScanner = useScanner;
+			UsingModem = useModem;
+			SataID = sataId;
+		}
+
 		public int PID { get; set; }
 
 		private int _InitializationTime;
