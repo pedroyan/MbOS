@@ -9,8 +9,10 @@ using System.Text;
 
 namespace MbOS.MemoryDomain {
 	public class MemoryManager {
-		private BlockChain<MemoryBlock> RealTime = new BlockChain<MemoryBlock>(64);
-		private BlockChain<MemoryBlock> User = new BlockChain<MemoryBlock>(960);
+		public const int RealTimeSize = 64;
+		public const int UserSize = 960;
+		private BlockChain<MemoryBlock> RealTime = new BlockChain<MemoryBlock>(RealTimeSize);
+		private BlockChain<MemoryBlock> User = new BlockChain<MemoryBlock>(UserSize);
 
 		/// <summary>
 		/// Aloca um bloco contíguo de memória para o processo

@@ -139,7 +139,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// Retorna qual processo deve ser executado á seguir. Devolve nulo
 		/// caso não seja necessária a execução de nenhum processo
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>O processo que deve ser executado</returns>
 		private Process GetNextProcess() {
 
 			var processosPrioritarios = CPU == null ? prioridades

@@ -1,6 +1,7 @@
 ﻿using MbOS.Common;
 using MbOS.FileDomain.DataStructures;
 using MbOS.Interfaces;
+using MbOS.MemoryDomain;
 using MbOS.MemoryDomain.DataStructures;
 using MbOS.ProcessDomain.DataStructures;
 using MbOS.ResourcesDomain;
@@ -33,7 +34,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				scheduler = new ProcessScheduler(processList);
 				scheduler.RunScheduler();
 			} catch (FileFormatException ex) {
-				Console.WriteLine($"Arquivo {fileName} inválido: {ex.Message}");
+				Console.WriteLine($"Arquivo {fileName} inválido:\n{ex.Message}");
 				throw;
 			} catch (Exception ex) {
 				Console.WriteLine($"Erro no módulo de processos: {ex.Message}");
@@ -83,6 +84,14 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			var priority = ParseParameter(parameters, 1, lineCount);
 			var processingTime = ParseParameter(parameters, 2, lineCount);
 			var memoryBlocks = ParseParameter(parameters, 3, lineCount);
+
+			if (priority == 0 && memoryBlocks > MemoryManager.RealTimeSize) {
+				throw new FileFormatException($"Erro na linha {lineCount}: Processo de tempo real não pode ocupar uma memória maior do que {MemoryManager.RealTimeSize}");
+			}
+
+			if (priority != 0 && memoryBlocks > MemoryManager.UserSize) {
+				throw new FileFormatException($"Erro na linha {lineCount}: Processo de usuário não pode ocupar uma memória maior do que {MemoryManager.UserSize}");
+			}
 
 			if (!Enum.TryParse(parameters[4], out PrinterEnum printerId)) {
 				throw new FileFormatException($"Erro na linha {lineCount}: Id de impressora inválido");
