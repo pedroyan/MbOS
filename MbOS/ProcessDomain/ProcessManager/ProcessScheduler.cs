@@ -73,6 +73,9 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 				//reorganiza os processos
 				prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
+
+				//Padding entre a instrução executada e o print do dispatcher
+				Console.WriteLine("");
 			}
 
 			PrintNewProcessInfo(novoProcesso);
@@ -101,10 +104,10 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				Console.WriteLine($"\t Using Modem? {process.UsingModem}");
 
 				var sataIdMessage = process.UsingSata ? $" - Sata Id {(int)process.SataID}" : "";
-				Console.WriteLine($"\t Using SATA? {process.UsingSata}{sataIdMessage}");
+				Console.WriteLine($"\t Using SATA? {process.UsingSata}{sataIdMessage}\n");
 			}
 
-			Console.WriteLine($"\nprocess {process.PID} =>");
+			Console.WriteLine($"process {process.PID} =>");
 		}
 
 		private void TickClock() {
