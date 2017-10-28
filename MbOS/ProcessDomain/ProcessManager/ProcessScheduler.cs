@@ -24,7 +24,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <summary>
 		/// Processo sendo executado
 		/// </summary>
-		private Process RunningProcess;
+		private Process CPU;
 
 		/// <summary>
 		/// Gerenciador de memória
@@ -68,23 +68,52 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		}
 
 		private void Preempcao(Process novoProcesso) {
-			if (RunningProcess != null && RunningProcess != novoProcesso) {
-				RunningProcess.Promote();
+			if (CPU != null && CPU != novoProcesso) {
+				CPU.Promote();
 
 				//reorganiza os processos
 				prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
 			}
 
-			RunningProcess = novoProcesso;
+			PrintNewProcessInfo(novoProcesso);
+			CPU = novoProcesso;
+
+		}
+
+		/// <summary>
+		/// Imprime na tela as informações do novo processo 
+		/// <paramref name="process"/> que entrou na CPU
+		/// </summary>
+		/// <param name="process">Processo que entrou na CPU</param>
+		private void PrintNewProcessInfo(Process process) {
+			if (process.TicksRan < 1) {
+				Console.WriteLine("dispatcher =>");
+				Console.WriteLine($"\t PID: {process.PID}");
+				Console.WriteLine($"\t ofsset: {process.MemoryUsed.StartIndex}");
+				Console.WriteLine($"\t blocks: {process.MemoryUsed.BlockSize}");
+				Console.WriteLine($"\t priority: {process.Priority}");
+				Console.WriteLine($"\t time: {process.ProcessingTime}");
+
+				var PrinterIdMessage = process.UsingPrinter ? $" - Printer Id {(int)process.PrinterId}" : "";
+				Console.WriteLine($"\t Using printer: {process.UsingPrinter}{PrinterIdMessage}");
+
+				Console.WriteLine($"\t scanner: {process.UsingScanner}");
+				Console.WriteLine($"\t modem: {process.UsingModem}");
+
+				var sataIdMessage = process.UsingSata ? $" - Sata Id {(int)process.SataID}" : "";
+				Console.WriteLine($"\t drive: {process.UsingSata}{sataIdMessage}");
+			}
+
+			Console.WriteLine($"\nprocess {process.PID} =>");
 		}
 
 		private void TickClock() {
 
-			if (RunningProcess != null) {
-				RunningProcess.Run();
+			if (CPU != null) {
+				CPU.Run();
 
-				if (RunningProcess.Concluido) {
-					FinishProcess(RunningProcess);
+				if (CPU.Concluido) {
+					FinishProcess(CPU);
 				}
 			}
 
@@ -99,7 +128,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			memoryManager.DeallocateMemory(process.PID, process.Priority == 0);
 			deviceManager.FreeResources(process.PID);
 
-			RunningProcess = null;
+			CPU = null;
 			processosCompletos++;
 		}
 
@@ -110,8 +139,8 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <returns></returns>
 		private Process GetNextProcess() {
 
-			var processosPrioritarios = RunningProcess == null ? prioridades
-				: prioridades.Where(p => p.Key < RunningProcess.Priority);
+			var processosPrioritarios = CPU == null ? prioridades
+				: prioridades.Where(p => p.Key < CPU.Priority);
 
 			foreach (var grupoPrioridade in processosPrioritarios) {
 				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0).OrderBy(p=>p.PID);

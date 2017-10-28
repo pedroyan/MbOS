@@ -83,19 +83,14 @@ namespace MbOS.ProcessDomain.DataStructures {
 			Console.WriteLine($"P{PID} instruction {TicksRan}");
 
 			if (Concluido) {
-				Console.WriteLine($"P{PID} return SIGINT");
+				Console.WriteLine($"P{PID} return SIGINT\n");
 			}
 		}
 
-		/// <summary>
-		/// Printa na tela a mensagem de preempção
-		/// </summary>
-		public void PrintPreemptionMessage() {
-
-		}
-
 		public void Promote() {
-			PrintPreemptionMessage();
+			if (Priority == 0) {
+				throw new ArgumentOutOfRangeException("Não é possível promover um processo de prioridade 0");
+			}
 			Priority--;
 		}
 
