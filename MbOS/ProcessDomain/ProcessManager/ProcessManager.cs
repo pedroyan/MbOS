@@ -24,7 +24,10 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		}
 
 		public void Run() {
+
+			//Registra o process manager como implementação do IProcessService
 			RegistrationService.RegisterInstance<IProcessService>(this);
+
 			try {
 				var processList = ReadProcessesFromFile();
 				scheduler = new ProcessScheduler(processList);
@@ -40,42 +43,56 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			initializationFile.Dispose();
 		}
 
+		/// <summary>
+		/// Realiza a leitura do arquivo contendo os processos e os converte em uma
+		/// lista de processos
+		/// </summary>
+		/// <returns>Lista de processos extraídas do arquivo</returns>
 		private List<Process> ReadProcessesFromFile() {
 			string line;
 			var pList = new List<Process>();
 			int PID = 0;
+			int lineCount = 0;
 
 			while ((line = GetNextLine()) != null) {
+				lineCount++;
 				if(!string.IsNullOrEmpty(line)) {
 					PID++;
-					pList.Add(ParseLine(line,PID));
+					pList.Add(ParseLine(line,PID,lineCount));
 				}
 			}
 
 			return pList;
 		}
 
-		private Process ParseLine(string line, int PID) {
+		/// <summary>
+		/// Realiza o parsing da linha
+		/// </summary>
+		/// <param name="line">Texto contido na linha</param>
+		/// <param name="PID">Id do processo</param>
+		/// <param name="lineCount">Número da linha lida</param>
+		/// <returns>Processo parseado</returns>
+		private Process ParseLine(string line, int PID, int lineCount) {
 
 			var parameters = line.Replace(" ", "").Split(",");
 			if (parameters.Length != 8) {
-				throw new FileFormatException($"Erro na linha {PID}: São necessário 8 parâmetros por linha");
+				throw new FileFormatException($"Erro na linha {lineCount}: São necessário 8 parâmetros por linha");
 			}
 
-			var initTime = ParseParameter(parameters, 0, PID);
-			var priority = ParseParameter(parameters, 1, PID);
-			var processingTime = ParseParameter(parameters, 2, PID);
-			var memoryBlocks = ParseParameter(parameters, 3, PID);
+			var initTime = ParseParameter(parameters, 0, lineCount);
+			var priority = ParseParameter(parameters, 1, lineCount);
+			var processingTime = ParseParameter(parameters, 2, lineCount);
+			var memoryBlocks = ParseParameter(parameters, 3, lineCount);
 
 			if (!Enum.TryParse(parameters[4], out PrinterEnum printerId)) {
-				throw new FileFormatException($"Erro na linha {PID}: Id de impressora inválido");
+				throw new FileFormatException($"Erro na linha {lineCount}: Id de impressora inválido");
 			}
 
-			var scannerRequested = ParseParameter(parameters, 5, PID) != 0; 
-			var modemRequest = ParseParameter(parameters, 6, PID) != 0;
+			var scannerRequested = ParseParameter(parameters, 5, lineCount) != 0; 
+			var modemRequest = ParseParameter(parameters, 6, lineCount) != 0;
 
 			if (!Enum.TryParse(parameters[7],out SataEnum sataId)) {
-				throw new FileFormatException($"Erro na linha {PID}: Id do dispositivo SATA inválida");
+				throw new FileFormatException($"Erro na linha {lineCount}: Id do dispositivo SATA inválida");
 			}
 
 			return new Process(PID, initTime, priority, processingTime, memoryBlocks, printerId,
