@@ -13,7 +13,7 @@ namespace MbOS.ProcessDomain.DataStructures {
 			InitializationTime = initTime;
 			Priority = priority;
 			ProcessingTime = processingTime;
-			MemoryUsed = new MemoryBlock(memoryBlocks);
+			MemoryUsed = new MemoryBlock(memoryBlocks,PID);
 			PrinterId = printerId;
 			this.UsingScanner = useScanner;
 			UsingModem = useModem;
