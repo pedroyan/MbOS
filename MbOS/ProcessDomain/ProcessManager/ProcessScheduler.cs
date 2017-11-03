@@ -30,6 +30,10 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// Gerenciador de memória
 		/// </summary>
 		private MemoryManager memoryManager;
+
+		/// <summary>
+		/// Gerenciador de Dispositivos
+		/// </summary>
 		private DeviceManager deviceManager;
 
 		int processosCount;
@@ -54,6 +58,8 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 			Processos = processes ?? new List<Process>();
 
+			//Ordena os processos de acordo com prioridades, exemplo:
+			//|Grupo prioridade 0(p1,p2,p3)|Grupo prioridade 1 (p4,p7,p8) | Grupo prioridade 2 (p5,p6,p9)| ...
 			prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
 		}
 
@@ -137,7 +143,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 		/// <summary>
 		/// Retorna qual processo deve ser executado á seguir. Devolve nulo
-		/// caso não seja necessária a execução de nenhum processo
+		/// caso não seja necessária a execução de nenhum processo no próximo "clock"
 		/// </summary>
 		/// <returns>O processo que deve ser executado</returns>
 		private Process GetNextProcess() {
@@ -146,9 +152,14 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				: prioridades.Where(p => p.Key < CPU.Priority);
 
 			foreach (var grupoPrioridade in processosPrioritarios) {
+
+				//Para cada grupo prioridade, pega somente os processos dentro daquele grupo que estão pronto para executar.
 				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0).OrderBy(p=>p.PID);
 				var realTime = grupoPrioridade.Key == 0;
+
 				foreach (var processo in readyToRun) {
+
+					//Cado o processo possa alocar os recursos pedidos
 					if (memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime) 
 						&& deviceManager.CanAllocateDevices(processo)) {
 
