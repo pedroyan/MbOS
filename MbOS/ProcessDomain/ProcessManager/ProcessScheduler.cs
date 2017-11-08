@@ -75,7 +75,6 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 		private void Preempcao(Process novoProcesso) {
 			if (CPU != null && CPU != novoProcesso) {
-				CPU.Promote();
 
 				//reorganiza os processos
 				prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
@@ -128,9 +127,13 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 			foreach (var proc in Processos) {
 				proc.InitializationTime--;
-			}
+                if (proc.Priority > 0 && proc != CPU) {
+                    proc.Promote();
+                }
 
-			tickCount++;
+            }
+
+            tickCount++;
 		}
 
 		private void FinishProcess(Process process) {
