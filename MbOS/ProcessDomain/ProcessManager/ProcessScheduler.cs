@@ -75,11 +75,6 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 		private void Preempcao(Process novoProcesso) {
 			if (CPU != null && CPU != novoProcesso) {
-				CPU.Promote();
-
-				//reorganiza os processos
-				prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
-
 				//Padding entre a instrução executada e o print do dispatcher
 				Console.WriteLine("");
 			}
@@ -127,10 +122,17 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			}
 
 			foreach (var proc in Processos) {
-				proc.InitializationTime--;
-			}
+                if (proc.Priority > 1 && proc != CPU && proc.InitializationTime==0 && proc.Concluido==false ) {
+                    proc.Promote();
+                    //reorganiza os processos
+                    prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
 
-			tickCount++;
+                }
+                proc.InitializationTime--;
+
+            }
+
+            tickCount++;
 		}
 
 		private void FinishProcess(Process process) {
@@ -159,9 +161,11 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 				foreach (var processo in readyToRun) {
 
-					//Cado o processo possa alocar os recursos pedidos
-					if (memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime) 
-						&& deviceManager.CanAllocateDevices(processo)) {
+                    var canAllocateMemory = memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime);
+                    var canAllocateDevice = deviceManager.CanAllocateDevices(processo);
+
+                    //Cado o processo possa alocar os recursos pedidos
+                    if (canAllocateMemory&&canAllocateDevice ) {
 
 						// aloca memoria
 						memoryManager.AllocateMemory(processo.MemoryUsed, realTime);
