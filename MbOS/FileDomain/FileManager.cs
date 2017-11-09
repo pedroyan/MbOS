@@ -31,7 +31,8 @@ namespace MbOS.FileDomain {
 			try {
 				hardDrive = InitializeHDD(initializationFile);
 				ExecuteInstructions(initializationFile);
-				initializationFile.Dispose();
+                hardDrive.HardDriveMap();
+                initializationFile.Dispose();
 			} catch (FileFormatException ex) {
 				Console.WriteLine($"Arquivo {fileName} inválido: {ex.Message}");
 				throw;
@@ -57,8 +58,9 @@ namespace MbOS.FileDomain {
 				i++;
 			}
 		}
+       
 
-		private HardDrive InitializeHDD(StreamReader reader) {
+            private HardDrive InitializeHDD(StreamReader reader) {
 			var line = GetNextLine();
 			if (!int.TryParse(line, out int hdSize)) {
 				throw new FileFormatException($@"A primeira linha deve conter um valor numérico representando o tamanho do HDD. \n Valor encontrado:{line}");
