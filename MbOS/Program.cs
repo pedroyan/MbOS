@@ -10,7 +10,7 @@ namespace MbOS {
 
 #if DEBUG
 			string processPath = "Resources/processes2.txt";
-			string filesPath = "Resources/files.txt";
+			string filesPath = "Resources/files3.txt";
 #else
 			AppDomain.CurrentDomain.UnhandledException += MasterHandler;
 			if (args.Length != 2) {

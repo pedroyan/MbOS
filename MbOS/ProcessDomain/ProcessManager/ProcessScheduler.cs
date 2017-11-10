@@ -73,7 +73,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			}
 		}
 
-		private void Preempcao(Process novoProcesso) {
+		public void Preempcao(Process novoProcesso) {
 			if (CPU != null && CPU != novoProcesso) {
 				//Padding entre a instrução executada e o print do dispatcher
 				Console.WriteLine("");
@@ -111,7 +111,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			Console.WriteLine($"process {process.PID} =>");
 		}
 
-		private void TickClock() {
+		public void TickClock() {
 
 			if (CPU != null) {
 				CPU.Run();
@@ -148,7 +148,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// caso não seja necessária a execução de nenhum processo no próximo "clock"
 		/// </summary>
 		/// <returns>O processo que deve ser executado</returns>
-		private Process GetNextProcess() {
+		public Process GetNextProcess() {
 
 			var processosPrioritarios = CPU == null ? prioridades
 				: prioridades.Where(p => p.Key < CPU.Priority);
