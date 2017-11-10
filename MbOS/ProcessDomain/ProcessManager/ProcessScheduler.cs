@@ -122,7 +122,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			}
 
 			foreach (var proc in Processos) {
-                if (proc.Priority > 1 && proc != CPU && proc.InitializationTime==0 && proc.Concluido==false ) {
+                if (proc.Priority > 1 && proc != CPU && proc.TicksRan>0 && proc.Concluido==false ) {
                     proc.Promote();
                     //reorganiza os processos
                     prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
