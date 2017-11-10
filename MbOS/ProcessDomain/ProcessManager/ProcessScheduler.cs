@@ -14,7 +14,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <summary>
 		/// Processos agrupados em prioridade
 		/// </summary>
-		private IEnumerable<IGrouping<int, Process>> prioridades;
+		public IEnumerable<IGrouping<int, Process>> prioridades;
 
 		/// <summary>
 		/// Lista contendo todos os processos
@@ -24,21 +24,21 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <summary>
 		/// Processo sendo executado
 		/// </summary>
-		private Process CPU;
+		public Process CPU;
 
 		/// <summary>
 		/// Gerenciador de memória
 		/// </summary>
-		private MemoryManager memoryManager;
+		public MemoryManager memoryManager;
 
 		/// <summary>
 		/// Gerenciador de Dispositivos
 		/// </summary>
-		private DeviceManager deviceManager;
+		public DeviceManager deviceManager;
 
-		int processosCount;
-		int processosCompletos;
-		int tickCount;
+		public int processosCount;
+		public int processosCompletos;
+		public int tickCount;
 
 		/// <summary>
 		/// Constrói uma instância de um process scheduler
@@ -89,7 +89,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <paramref name="process"/> que entrou na CPU
 		/// </summary>
 		/// <param name="process">Processo que entrou na CPU</param>
-		private void PrintNewProcessInfo(Process process) {
+		public void PrintNewProcessInfo(Process process) {
 			if (process.TicksRan < 1) {
 				Console.WriteLine("dispatcher =>");
 				Console.WriteLine($"\t PID: {process.PID}");
