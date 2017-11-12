@@ -99,6 +99,26 @@ namespace MbOS.ProcessDomain.DataStructures {
 			TicksRan++;
 			PrintRunningMessage();
 		}
+        public override bool Equals(object other) {
+            var toCompareWith = other as Process;
+            if (toCompareWith == null)
+                return false;
+            return this.Concluido == toCompareWith.Concluido &&
+                this.InitializationTime == toCompareWith.InitializationTime &&
+                this.MemoryUsed.BlockSize == toCompareWith.MemoryUsed.BlockSize &&
+                this.PID==toCompareWith.PID &&
+                this.PrinterId==toCompareWith.PrinterId &&
+                this.Priority== toCompareWith.Priority &&
+                this.ProcessingTime== toCompareWith.ProcessingTime &&
+                this.SataID== toCompareWith.SataID &&
+                this.TicksRan== toCompareWith.TicksRan &&
+                this.UsingModem== toCompareWith.UsingModem &&
+                this.UsingPrinter== toCompareWith.UsingPrinter &&
+                this.UsingSata== toCompareWith.UsingSata &&
+                this.UsingScanner== toCompareWith.UsingScanner &&
+                this.InitializationTime== toCompareWith.InitializationTime;
+        }
 
-	}
+      
+    }
 }

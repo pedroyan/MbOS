@@ -49,7 +49,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// lista de processos
 		/// </summary>
 		/// <returns>Lista de processos extraídas do arquivo</returns>
-		private List<Process> ReadProcessesFromFile() {
+		public List<Process> ReadProcessesFromFile() {
 			string line;
 			var pList = new List<Process>();
 			int PID = 0;
