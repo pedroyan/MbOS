@@ -21,7 +21,7 @@ namespace MbOS.UnitTest {
 		}
 
 		[TestMethod]
-		public void PriorityTest(){
+		public void exemplos(){
 
             // Testa se os processos estao aumentando de prioridade corretamento(1 nao pose virar 0)
             // e aumento de prioridade a cada batida de clock
@@ -53,7 +53,7 @@ namespace MbOS.UnitTest {
 
 
             //verifica os precessos de id4
-            ScheduleStep(scheduler);
+            ScheduleStep(scheduler,1);
             var teste = scheduler.prioridades.Where(p => p.Key ==4);
             //seleciona o de id 3 e verifica o id
             var teste2 = teste.FirstOrDefault().Where(p => p.PID == 3).FirstOrDefault();
@@ -62,7 +62,7 @@ namespace MbOS.UnitTest {
 
             //EXEMPLOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 
-
+            /*
             #region ValidSectors
             var ListaArquivos = new List<HardDriveEntry>() {
 				new HardDriveEntry("Arquivo A",0,1){ StartIndex = -1},
@@ -110,63 +110,44 @@ namespace MbOS.UnitTest {
 			};
 
 			TestOverlap(ListaArquivos, 6, false);
-			#endregion
+			#endregion*/
 		}
 
 		[TestMethod]
-		public void AddFileTest2() {
+		public void priorityTest() {
+            //Assert.AreEqual(resultFile, file);
+            var ListaProcessos = new List<Process>() {
 
-			// A|A|0|0|0|B|B|B|C|0| D| D| 0|
-			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
-			var initializationList = new List<HardDriveEntry>() {
-				new HardDriveEntry("A",0,2),
-				new HardDriveEntry("B",0,3){StartIndex = 5},
-				new HardDriveEntry("C",0,1){StartIndex=8},
-				new HardDriveEntry("D",0,2){StartIndex=10}
-			};
+            new Process(1,1,4,8,64, PrinterEnum.Printer1 , true, false, SataEnum.Sata2),
+            new Process(2,2,0,11,64, PrinterEnum.Printer2, false, false, SataEnum.None),
+            new Process(3,3,4,6,64, PrinterEnum.None, false, false, SataEnum.None),
+            new Process(4,3,1,6,64, PrinterEnum.None, false, false, SataEnum.None),
+            new Process(5,0,10,8,64, PrinterEnum.Printer1 , true, false, SataEnum.Sata2)};
+            var scheduler = new ProcessScheduler(ListaProcessos);
 
-			var hd = new HardDrive(13, initializationList);
-			var file = new HardDriveEntry("E", 7, 3);
-			TestAdicionarArquivo(hd, file, deveFuncionar: false);
+            ScheduleStep(scheduler, 2);//segundo 2,verifica se o processo 1 ficou retido pelo 5 por falta de recurso(no caso printer 1 e sata2)
+            Assert.AreEqual(scheduler.CPU.PID, 5);
+            //verifica se a cpu fez a preemcpao correta com a prioridade 0,sendo que utilizam o mesmo recurso mas com ids diferentes
+            ScheduleStep(scheduler,1);//segundo 3
+            Assert.AreEqual(scheduler.CPU.PID, 2);
 
-			file = new HardDriveEntry("E", 0, 3);
-			TestAdicionarArquivo(hd, file, deveFuncionar: true);
+            ScheduleStep(scheduler,1);//segundo 4
 
-			// A|A|E|E|E|B|B|B|C|0| D| D| 0|
-			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
-			var resultFile = hd.GetEntryAt(1);
-			Assert.AreEqual(resultFile, file);
+            //verifica se a prioridade foi aumentada corretamente,como se passaram 2 segundos entao deve se abaixar por 2
+            TestPriority(scheduler,5,8);
+            TestPriority(scheduler,3,4);
 
-			file = new HardDriveEntry("F", 0, 2);
-			TestAdicionarArquivo(hd, file, deveFuncionar: false);
+            //apos 4 cicls 
+            ScheduleStep(scheduler, 8);//segundo 12
+            //verifica se a prioridade foi 1 e nao abaixou pra 0 e se o processo 3 realmente nao mudou a prioridade mesmoe stando esperando esperando
+            TestPriority(scheduler, 5, 1);
+            TestPriority(scheduler, 3, 4);
 
-			// A|A|E|E|E|B|B|B|C|G| D| D| 0|
-			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
-			file = new HardDriveEntry("G", 0, 1);
-			TestAdicionarArquivo(hd, file, deveFuncionar: true);
 
-			resultFile = hd.GetEntryAt(4);
-			Assert.AreEqual(resultFile, file);
 
-			// A|A|E|E|E|B|B|B|C|G| D| D| H|
-			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
-			file = new HardDriveEntry("H", 0, 1);
-			TestAdicionarArquivo(hd, file, deveFuncionar: true);
+        }
 
-			resultFile = hd.GetEntryAt(6);
-			Assert.AreEqual(resultFile, file);
-
-			TestRemoverArquivo(hd, "A", 0, deveFuncionar: true);
-
-			// 0|0|E|E|E|B|B|B|C|G| D| D| H|
-			// 0|1|2|3|4|5|6|7|8|9|10|11|12|
-			file = new HardDriveEntry("F", 0, 2);
-			TestAdicionarArquivo(hd, file, deveFuncionar: true);
-
-			resultFile = hd.GetEntryAt(0);
-		}
-
-		[TestMethod]
+        [TestMethod]
 		public void RemoveFileTest2() {
 
 			// A|A|0|0|0|B|B|B|C|0| D| D| 0|
@@ -202,14 +183,13 @@ namespace MbOS.UnitTest {
 			Assert.AreEqual(file, hd.GetEntryAt(1));
 		}
 
-		private void TestSetorInvalido(List<HardDriveEntry> initList, int hdSize) {
-			try {
-				var hd = new HardDrive(hdSize, initList);
-				Assert.Fail();
-			} catch (ArgumentOutOfRangeException ex) {
-				Assert.IsTrue(ex.ParamName == nameof(HardDriveEntry.StartIndex));
-			}
-		}
+		private void TestPriority(ProcessScheduler scheduler,int PID,int prioridadeEsperada) {
+            var processos = scheduler.Processos;
+
+            var t1 = processos.Where(p => p.PID == PID).FirstOrDefault();
+            Assert.AreEqual(t1.Priority, prioridadeEsperada);
+
+        }
 
 		private void TestEspacoEstourado(List<HardDriveEntry> initList, int hdSize, bool deveFuncionar) {
 			try {
@@ -265,13 +245,15 @@ namespace MbOS.UnitTest {
 			}
 		}
 
-        private void ScheduleStep(ProcessScheduler scheduler) {
-            if (scheduler.processosCompletos < scheduler.processosCount) {
-                var proc = scheduler.GetNextProcess();
-                if (proc != null) {
-                    scheduler.Preempcao(proc);
+        private void ScheduleStep(ProcessScheduler scheduler,int steps) {
+            for (int i = 0; i < steps; i++) {
+                if (scheduler.processosCompletos < scheduler.processosCount) {
+                    var proc = scheduler.GetNextProcess();
+                    if (proc != null) {
+                        scheduler.Preempcao(proc);
+                    }
+                    scheduler.TickClock();
                 }
-                scheduler.TickClock();
             }
         }
     }
