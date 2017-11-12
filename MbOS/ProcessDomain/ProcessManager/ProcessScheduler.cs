@@ -119,8 +119,9 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				if (CPU.Concluido) {
 					FinishProcess(CPU);
 				}
+               
 			}
-
+         
 			foreach (var proc in Processos) {
                 if (proc.Priority > 1 && proc != CPU && proc.TicksRan>0 && proc.Concluido==false ) {
                     proc.Promote();
@@ -157,13 +158,15 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 				//Para cada grupo prioridade, pega somente os processos dentro daquele grupo que estão pronto para executar.
 				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0).OrderBy(p=>p.PID);
-				var realTime = grupoPrioridade.Key == 0;
+                var readyToAllocate = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0 && p.TicksRan == 0).OrderBy(p => p.PID);
+                var realTime = grupoPrioridade.Key == 0;
 
-				foreach (var processo in readyToRun) {
+                foreach (var processo in readyToAllocate) {
 
                     var canAllocateMemory = memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime);
                     var canAllocateDevice = deviceManager.CanAllocateDevices(processo);
 
+                    
                     //Cado o processo possa alocar os recursos pedidos
                     if (canAllocateMemory&&canAllocateDevice ) {
 
@@ -176,7 +179,11 @@ namespace MbOS.ProcessDomain.ProcessManager {
 						//retorna para execução
 						return processo;
 					}
+
 				}
+                if (readyToRun.FirstOrDefault() != null) {
+                  return readyToRun.FirstOrDefault();
+                }
 			}
 			return null;
 		}
