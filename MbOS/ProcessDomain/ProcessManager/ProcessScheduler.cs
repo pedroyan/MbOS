@@ -91,9 +91,11 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <param name="process">Processo que entrou na CPU</param>
 		public void PrintNewProcessInfo(Process process) {
 			if (process.TicksRan < 1) {
-				Console.WriteLine("dispatcher =>");
+                var startIndex = process.MemoryUsed.StartIndex == 0 ? process.MemoryUsed.StartIndex : process.MemoryUsed.StartIndex + 1;
+
+                Console.WriteLine("dispatcher =>");
 				Console.WriteLine($"\t PID: {process.PID}");
-				Console.WriteLine($"\t ofsset: {process.MemoryUsed.StartIndex}");
+				Console.WriteLine($"\t ofsset: {startIndex}");
 				Console.WriteLine($"\t blocks: {process.MemoryUsed.BlockSize}");
 				Console.WriteLine($"\t priority: {process.Priority}");
 				Console.WriteLine($"\t time: {process.ProcessingTime}");
@@ -176,12 +178,14 @@ namespace MbOS.ProcessDomain.ProcessManager {
 						// aloca recurso
 						deviceManager.Allocate(processo);
 
+                        processo.isAllocated = true;
+
 						//retorna para execução
 						return processo;
 					}
 
 				}
-                if (readyToRun.FirstOrDefault() != null) {
+                if (readyToRun.FirstOrDefault() != null && readyToRun.FirstOrDefault().isAllocated) {
                   return readyToRun.FirstOrDefault();
                 }
 			}
