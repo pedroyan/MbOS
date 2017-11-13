@@ -69,9 +69,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				if (proc != null) {
 					Preempcao(proc);
 				}
-                if (proc == null && CPU == null) {
-                    throw new Exception("Nenhum processo escalonado com cpu vazia");
-                }
+               
 				TickClock();
 			}
 		}
