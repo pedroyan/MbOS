@@ -69,6 +69,9 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				if (proc != null) {
 					Preempcao(proc);
 				}
+                if (proc == null && CPU == null) {
+                    throw new Exception("Nenhum processo escalonado com cpu vazia");
+                }
 				TickClock();
 			}
 		}
@@ -123,7 +126,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			}
          
 			foreach (var proc in Processos) {
-                if (proc.Priority > 1 && proc != CPU && proc.TicksRan>0 && proc.Concluido==false ) {
+                if (proc.Priority > 1 && proc != CPU && proc.TicksRan>0 && !proc.Concluido ) {
                     proc.Promote();
                     //reorganiza os processos
                     prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
@@ -161,7 +164,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
                 var readyToAllocate = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0 && p.TicksRan == 0).OrderBy(p => p.PID);
                 var realTime = grupoPrioridade.Key == 0;
 
-                foreach (var processo in readyToAllocate) {
+                foreach (var processo in readyToRun) {
 
                     var canAllocateMemory = memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime);
                     var canAllocateDevice = deviceManager.CanAllocateDevices(processo);
@@ -176,16 +179,11 @@ namespace MbOS.ProcessDomain.ProcessManager {
 						// aloca recurso
 						deviceManager.Allocate(processo);
 
-                        processo.isAllocated = true;
-
 						//retorna para execução
 						return processo;
 					}
 
 				}
-                if (readyToRun.FirstOrDefault() != null && readyToRun.FirstOrDefault().isAllocated) {
-                  return readyToRun.FirstOrDefault();
-                }
 			}
 			return null;
 		}

@@ -93,6 +93,16 @@ namespace MbOS.UnitTest {
             new Process(2,2, 0, 3, 64, PrinterEnum.Printer1, false, false, SataEnum.None),
             new Process(3,3, 1, 2, 64, PrinterEnum.Printer2, false, false, SataEnum.None)};
 
+            if (listaProcessosIdeal.Count != processList.Count) {
+                Assert.Fail();
+            }
+
+            for (int i = 0; i < listaProcessosIdeal.Count; i++) {
+                if (!listaProcessosIdeal[i].Compare(processList[i])) {
+                    Assert.Fail();
+                }
+            }
+
             CollectionAssert.Equals(listaProcessosIdeal, processList);
       
         }

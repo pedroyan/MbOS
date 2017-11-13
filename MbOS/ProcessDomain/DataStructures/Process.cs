@@ -99,7 +99,7 @@ namespace MbOS.ProcessDomain.DataStructures {
 			TicksRan++;
 			PrintRunningMessage();
 		}
-        public override bool Equals(object other) {
+        public bool Compare(object other) {
             var toCompareWith = other as Process;
             if (toCompareWith == null)
                 return false;
