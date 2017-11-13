@@ -21,7 +21,7 @@ namespace MbOS.ProcessDomain.DataStructures {
 		}
 
 		public int PID { get; set; }
-        public bool isAllocated;
+        public bool IsAllocated { get; set; }
 
 		private int _InitializationTime;
 		/// <summary>

@@ -142,6 +142,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		private void FinishProcess(Process process) {
 			memoryManager.DeallocateMemory(process.PID, process.Priority == 0);
 			deviceManager.FreeResources(process.PID);
+            process.IsAllocated = false;
 
 			CPU = null;
 			processosCompletos++;
@@ -171,10 +172,13 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
                     
                     //Cado o processo possa alocar os recursos pedidos
-                    if (canAllocateMemory&&canAllocateDevice ) {
+                    if ((canAllocateMemory || processo.IsAllocated)&&canAllocateDevice ) {
 
-						// aloca memoria
-						memoryManager.AllocateMemory(processo.MemoryUsed, realTime);
+                        // aloca memoria
+                        if (!processo.IsAllocated) {
+						    memoryManager.AllocateMemory(processo.MemoryUsed, realTime);
+                            processo.IsAllocated = true;
+                        }
 
 						// aloca recurso
 						deviceManager.Allocate(processo);
