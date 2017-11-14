@@ -20,6 +20,10 @@ namespace MbOS.FileDomain {
 			diskDrive = new BlockChain<HardDriveEntry>(initializedFiles, size);
 		}
 
+        public HardDrive(int size) {
+            diskDrive = new BlockChain<HardDriveEntry>(size);
+        }
+
         /// <summary>
         /// Mostra o mapa de ocupacao do disco em forma de string
         /// </summary>

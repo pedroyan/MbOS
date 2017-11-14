@@ -4,14 +4,11 @@ using MbOS.FileDomain.DataStructures;
 using MbOS.Interfaces;
 using MbOS.ProcessDomain.DataStructures;
 using MbOS.ProcessDomain.ProcessManager;
+using MbOS.ResourcesDomain;
 using MbOS.UnitTest.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using MbOS.ResourcesDomain;
-using System.Text;
-using System.Linq;
-using System.IO;
 
 namespace MbOS.UnitTest {
     [TestClass]
@@ -28,38 +25,89 @@ namespace MbOS.UnitTest {
         /// </summary>
 		[TestMethod]
         public void IntegrationProcessTest() {
-
+            var InicilizationFiles = new List<HardDriveEntry>() {
+                new HardDriveEntry("X", null, 2) { StartIndex = 0 },
+                new HardDriveEntry("Y", null, 1) {StartIndex = 3},
+                new HardDriveEntry("Z", null, 1) {StartIndex = 5} };
            
+            var hdIdeal = new HardDrive(10,InicilizationFiles);//selecionado tamanho maximo que nem o arquivo
+                                            //valores inciais encontrados no arquivo de teste
+          
+
+
             var ListaProcessos = new List<Process>() {
             new Process(1,0,4,8,64, PrinterEnum.Printer1 , true, false, SataEnum.Sata2),
-            new Process(2,2,0,11,64, PrinterEnum.Printer2, false, false, SataEnum.None),
+            new Process(0,2,0,11,64, PrinterEnum.Printer2, false, false, SataEnum.None),
             new Process(3,3,4,6,64, PrinterEnum.None, false, false, SataEnum.None),
-            new Process(4,3,1,6,64, PrinterEnum.None, false, false, SataEnum.None),
-            new Process(5,0,10,8,64, PrinterEnum.Printer1 , true, false, SataEnum.Sata2)};
+           };
             var scheduler = new ProcessScheduler(ListaProcessos);
             scheduler.RunScheduler();
 
 
             var fileManager = new FileManager(filesPath);
-
             fileManager.hardDrive = fileManager.InitializeHDD(fileManager.initializationFile);
-            //le a primeira instrucao
-          ExecuteInstructionsByStep(fileManager,1);//Informacoes iniciais do arquivo
-          //  ExecuteInstructionsByStep(fileManager, 1);//executando a primeira instrucao
-            //hardDrive.HardDriveMap();
-            var teste = fileManager.hardDrive;
-
-            //for (int i = 0; i < fileManager.hardDrive.diskDrive.list.Count(); i++) {
-            //    if (!listaProcessosIdeal[i].Compare(processList[i])) {
-           //         Assert.Fail();
-            //    }
-         //   }
+            ProcessManager oi;
+            
 
 
+
+            TestExecutarInstrucao(fileManager,true);//1,Executa a primeira instrucao,tem de adicionar B corretamente
+            hdIdeal.AddFile(new HardDriveEntry("B", 3, 2));
+            CompareHD(hdIdeal, fileManager.hardDrive);
+
+            TestExecutarInstrucao(fileManager, false);//2,Devera ter uma falha ao adioconar A,entao o hd devera se manter o mesmo
+            CompareHD(hdIdeal, fileManager.hardDrive);
+
+            TestExecutarInstrucao(fileManager, false);//3,Devera ter uma falha ao deletarX ,entao o hd devera se manter o mesmo
+            CompareHD(hdIdeal, fileManager.hardDrive);
+
+            TestExecutarInstrucao(fileManager, true);//4,Devera deletar X corretamente
+            hdIdeal.RemoveFile("X", 0);
+            CompareHD(hdIdeal, fileManager.hardDrive);
+
+            TestExecutarInstrucao(fileManager, true);//5,Devera deletar B corretamente
+            hdIdeal.RemoveFile("B", 3);
+            CompareHD(hdIdeal, fileManager.hardDrive);
+
+            TestExecutarInstrucao(fileManager, true); ;//6,tem de adicionar D corretamente
+            hdIdeal.AddFile(new HardDriveEntry("D", 1, 1));
+            CompareHD(hdIdeal, fileManager.hardDrive);
+
+            TestExecutarInstrucao(fileManager, false); ;//7,devera dar erro ao adicionar E,mantendo o hd o mesmo
+            CompareHD(hdIdeal, fileManager.hardDrive);
+
+            TestExecutarInstrucao(fileManager,true);//8,devera adicionar F corretamente
+            hdIdeal.AddFile(new HardDriveEntry("F", 3, 4));
+            CompareHD(hdIdeal, fileManager.hardDrive);
 
 
 
         }
+        private void CompareHD(HardDrive hdIdeal,HardDrive hd) {
+                if (hdIdeal.diskDrive.list.Count != hd.diskDrive.list.Count) {
+                   Assert.Fail();
+              }
+
+            for (int i = 0; i < hd.diskDrive.list.Count; i++) {
+                if (!hdIdeal.diskDrive.list[i].Compare(hd.diskDrive.list[i])) {
+                    Assert.Fail();
+                }
+
+            }
+        }
+        private void TestExecutarInstrucao(FileManager fileManager, bool deveFuncionar) {
+            try {
+                ExecuteInstructionsByStep(fileManager, 1);
+                
+            } catch (HardDriveOperationException ex) {
+                Console.WriteLine(ex.Message);
+                if (deveFuncionar) {
+                    Assert.Fail();
+                }
+            }
+        }
+      
+        
 
         /// <summary>
         /// Executa n steps linhas da instrucao dada no arquivo txt de testes a fim de testar o FileManager junto com o ProcessManager
