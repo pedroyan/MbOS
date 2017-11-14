@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MbOS.Common.DataStructures {
 	public class BlockChain<T> where T : BlocoContiguo {
-		private List<T> list;
+		public List<T> list;
 
 		public int MaxSize { get; private set; }
 

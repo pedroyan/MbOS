@@ -10,13 +10,9 @@ using System.Text;
 namespace MbOS.FileDomain {
 	public class HardDrive {
 
-		private BlockChain<HardDriveEntry> diskDrive;
+		public BlockChain<HardDriveEntry> diskDrive;
 		private IProcessService processService = RegistrationService.Resolve<IProcessService>();
-		//public string HardDriveMap {
-		//	get {
-
-		//	}
-		//}
+		
 
 		public HardDrive(int size, List<HardDriveEntry> initialFiles) {
 
@@ -140,5 +136,6 @@ namespace MbOS.FileDomain {
 		public HardDriveEntry GetEntryAt(int index) {
 			return diskDrive.Collection.ElementAt(index);
 		}
+
 	}
 }
