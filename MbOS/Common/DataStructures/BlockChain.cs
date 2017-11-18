@@ -33,14 +33,14 @@ namespace MbOS.Common.DataStructures {
 		/// <param name="blockChain">Lista contendo os blocos ocupados</param>
 		/// <param name="maxSize">Tamanho máximo do container</param>
 		/// <returns>Uma flag indicando se a inserção foi bem sucedida</returns>
-		public bool FirstFit(T element){
+		public bool FirstFit(T element) {
 
 			var result = CanFitDetailed(element.BlockSize);
 			if (result.CanFit) {
-				element.StartIndex = result.PrimeiroIndice ;
+				element.StartIndex = result.PrimeiroIndice;
 				list.Insert(result.Index + 1, element);
 			}
-			 
+
 			return result.CanFit;
 		}
 
@@ -73,7 +73,7 @@ namespace MbOS.Common.DataStructures {
 
 			return new CanFitResult {
 				CanFit = false,
-			}; 
+			};
 		}
 
 		public bool CanFit(int size) {

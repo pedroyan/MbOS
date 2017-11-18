@@ -4,10 +4,10 @@ using System.Text;
 
 namespace MbOS.FileDomain.DataStructures.Instructions {
 	public class DeleteFileInstruction : FileInstruction {
-		public DeleteFileInstruction(string fileName, int PID) : base(PID, fileName) {}
+		public DeleteFileInstruction(string fileName, int PID) : base(PID, fileName) { }
 
 		public override void Execute(HardDrive hdd, int operationNumber) {
-			hdd.RemoveFile(FileName,PID);
+			hdd.RemoveFile(FileName, PID);
 			Console.WriteLine($"Operação {operationNumber} => Sucesso");
 			Console.WriteLine($"O Processo {PID} deletou o arquivo {FileName}");
 		}
