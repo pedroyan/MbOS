@@ -25,6 +25,30 @@ namespace MbOS.FileDomain {
 		}
 
 		/// <summary>
+		/// Mostra o mapa de ocupacao do disco em forma de string
+		/// </summary>
+		public void HardDriveMap() {
+			Console.Write("|");
+			for (int i = 0; i < diskDrive.MaxSize;) {
+				var blocoOcupado = diskDrive.Collection.Where(x => x.StartIndex == i).FirstOrDefault<HardDriveEntry>();
+
+				if (blocoOcupado != null) {
+					for (int y = 0; y < blocoOcupado.BlockSize; y++) {
+						Console.Write($"{blocoOcupado.FileName}|");
+						i++;
+					}
+
+				} else {
+					Console.Write("0|");
+					i++;
+				}
+
+			}
+
+
+		}
+
+		/// <summary>
 		/// Adiciona um arquivo no disco utilizando o algoritmo First-Fit
 		/// </summary>
 		/// <param name="file">Arquivo á ser adicionado</param>
