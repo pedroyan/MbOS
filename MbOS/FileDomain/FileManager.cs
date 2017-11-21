@@ -33,8 +33,8 @@ namespace MbOS.FileDomain {
 			try {
 				hardDrive = InitializeHDD(initializationFile);
 				ExecuteInstructions(initializationFile);
-                hardDrive.HardDriveMap();
-                initializationFile.Dispose();
+				hardDrive.HardDriveMap();
+				initializationFile.Dispose();
 			} catch (FileFormatException ex) {
 				Console.WriteLine($"Arquivo {fileName} inválido: {ex.Message}");
 				throw;
@@ -51,7 +51,7 @@ namespace MbOS.FileDomain {
 				var inst = ParseInstruction(line);
 				try {
 					//Testes podem ser feitos por injeção de dependência
-					inst.Execute(hardDrive,i);
+					inst.Execute(hardDrive, i);
 				} catch (HardDriveOperationException ex) {
 					Console.WriteLine($"Operacao {i} => Falha");
 					Console.WriteLine(ex.Message);
@@ -60,7 +60,7 @@ namespace MbOS.FileDomain {
 				i++;
 			}
 		}
-       
+
 
             public HardDrive InitializeHDD(StreamReader reader) {
 			var line = GetNextLine();
@@ -96,7 +96,7 @@ namespace MbOS.FileDomain {
 				}
 
 				var entryName = lineArguments[0];
-				if (!int.TryParse(lineArguments[1],out int startSector)) {
+				if (!int.TryParse(lineArguments[1], out int startSector)) {
 					throw new FileFormatException($"Registro na linha {lineCount} possui um indíce de setor inválido");
 				}
 
@@ -142,7 +142,7 @@ namespace MbOS.FileDomain {
 			}
 
 
-			return new DeleteFileInstruction(filename,pid);
+			return new DeleteFileInstruction(filename, pid);
 		}
 
 		public string GetNextLine() {

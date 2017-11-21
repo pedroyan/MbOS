@@ -43,17 +43,17 @@ namespace MbOS.FileDomain {
                     i++;
                 }
 
-            }
+			}
 
 
-        }
+		}
 
-        /// <summary>
-        /// Adiciona um arquivo no disco utilizando o algoritmo First-Fit
-        /// </summary>
-        /// <param name="file">Arquivo á ser adicionado</param>
-        /// <returns>O arquivo adicionado no hd</returns>
-        public HardDriveEntry AddFile(HardDriveEntry file) {
+		/// <summary>
+		/// Adiciona um arquivo no disco utilizando o algoritmo First-Fit
+		/// </summary>
+		/// <param name="file">Arquivo á ser adicionado</param>
+		/// <returns>O arquivo adicionado no hd</returns>
+		public HardDriveEntry AddFile(HardDriveEntry file) {
 			if (file == null) {
 				throw new ArgumentException("Arquivo não pode ser nulo", nameof(file));
 			}
