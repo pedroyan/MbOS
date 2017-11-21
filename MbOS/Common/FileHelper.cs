@@ -14,7 +14,7 @@ namespace MbOS.Common {
 		public static StreamReader OpenFile(string fileName) {
 			var location = AppDomain.CurrentDomain.BaseDirectory;
 			try {
-				return new StreamReader($"{location}\\{fileName}");
+				return new StreamReader(Path.Combine(location,fileName));
 			} catch (FileNotFoundException) {
 				Console.WriteLine($"Erro ao ler arquivo: arquivo {fileName} não encontrado no path de execução {location}");
 				throw;
