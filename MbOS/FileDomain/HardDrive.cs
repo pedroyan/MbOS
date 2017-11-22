@@ -10,13 +10,9 @@ using System.Text;
 namespace MbOS.FileDomain {
 	public class HardDrive {
 
-		private BlockChain<HardDriveEntry> diskDrive;
+		public BlockChain<HardDriveEntry> diskDrive;
 		private IProcessService processService = RegistrationService.Resolve<IProcessService>();
-		//public string HardDriveMap {
-		//	get {
-
-		//	}
-		//}
+		
 
 		public HardDrive(int size, List<HardDriveEntry> initialFiles) {
 
@@ -24,24 +20,28 @@ namespace MbOS.FileDomain {
 			diskDrive = new BlockChain<HardDriveEntry>(initializedFiles, size);
 		}
 
-		/// <summary>
-		/// Mostra o mapa de ocupacao do disco em forma de string
-		/// </summary>
-		public void HardDriveMap() {
-			Console.Write("|");
-			for (int i = 0; i < diskDrive.MaxSize;) {
-				var blocoOcupado = diskDrive.Collection.Where(x => x.StartIndex == i).FirstOrDefault<HardDriveEntry>();
+        public HardDrive(int size) {
+            diskDrive = new BlockChain<HardDriveEntry>(size);
+        }
 
-				if (blocoOcupado != null) {
-					for (int y = 0; y < blocoOcupado.BlockSize; y++) {
-						Console.Write($"{blocoOcupado.FileName}|");
-						i++;
-					}
+        /// <summary>
+        /// Mostra o mapa de ocupacao do disco em forma de string
+        /// </summary>
+        public void HardDriveMap() {
+            Console.Write("|");
+            for (int i = 0; i < diskDrive.MaxSize;) {
+                var blocoOcupado = diskDrive.Collection.Where(x => x.StartIndex == i).FirstOrDefault<HardDriveEntry>();
 
-				} else {
-					Console.Write("0|");
-					i++;
-				}
+                if (blocoOcupado != null) {
+                    for (int y = 0; y < blocoOcupado.BlockSize; y++) {
+                        Console.Write($"{blocoOcupado.FileName}|");
+                        i++;
+                    }
+
+                } else {
+                    Console.Write("0|");
+                    i++;
+                }
 
 			}
 
@@ -140,5 +140,6 @@ namespace MbOS.FileDomain {
 		public HardDriveEntry GetEntryAt(int index) {
 			return diskDrive.Collection.ElementAt(index);
 		}
+
 	}
 }

@@ -10,9 +10,9 @@ using System.Text;
 namespace MbOS.FileDomain {
 	public class FileManager {
 
-		private HardDrive hardDrive;
+		public HardDrive hardDrive;
 		private int lineCount;
-		private StreamReader initializationFile;
+		public StreamReader initializationFile;
 		private string fileName;
 
 		/// <summary>
@@ -24,10 +24,12 @@ namespace MbOS.FileDomain {
 			fileName = filename;
 		}
 
-		/// <summary>
-		/// Executa o gerenciado de arquivos
-		/// </summary>
-		public void Run() {
+       
+
+        /// <summary>
+        /// Executa o gerenciado de arquivos
+        /// </summary>
+        public void Run() {
 			try {
 				hardDrive = InitializeHDD(initializationFile);
 				ExecuteInstructions(initializationFile);
@@ -60,7 +62,7 @@ namespace MbOS.FileDomain {
 		}
 
 
-		private HardDrive InitializeHDD(StreamReader reader) {
+            public HardDrive InitializeHDD(StreamReader reader) {
 			var line = GetNextLine();
 			if (!int.TryParse(line, out int hdSize)) {
 				throw new FileFormatException($@"A primeira linha deve conter um valor numérico representando o tamanho do HDD. \n Valor encontrado:{line}");
@@ -112,7 +114,7 @@ namespace MbOS.FileDomain {
 
 		}
 
-		private FileInstruction ParseInstruction(string line) {
+		public FileInstruction ParseInstruction(string line) {
 			if (string.IsNullOrWhiteSpace(line)) {
 				throw new FileFormatException($"Instrução na linha {lineCount} vaziq");
 			}
@@ -143,7 +145,7 @@ namespace MbOS.FileDomain {
 			return new DeleteFileInstruction(filename, pid);
 		}
 
-		private string GetNextLine() {
+		public string GetNextLine() {
 			lineCount++;
 			return initializationFile.ReadLine();
 		}

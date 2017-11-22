@@ -14,7 +14,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <summary>
 		/// Processos agrupados em prioridade
 		/// </summary>
-		private IEnumerable<IGrouping<int, Process>> prioridades;
+		public IEnumerable<IGrouping<int, Process>> prioridades;
 
 		/// <summary>
 		/// Lista contendo todos os processos
@@ -24,21 +24,21 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <summary>
 		/// Processo sendo executado
 		/// </summary>
-		private Process CPU;
+		public Process CPU;
 
 		/// <summary>
 		/// Gerenciador de memória
 		/// </summary>
-		private MemoryManager memoryManager;
+		public MemoryManager memoryManager;
 
 		/// <summary>
 		/// Gerenciador de Dispositivos
 		/// </summary>
-		private DeviceManager deviceManager;
+		public DeviceManager deviceManager;
 
-		int processosCount;
-		int processosCompletos;
-		int tickCount;
+		public int processosCount;
+		public int processosCompletos;
+		public int tickCount;
 
 		/// <summary>
 		/// Constrói uma instância de um process scheduler
@@ -69,17 +69,13 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				if (proc != null) {
 					Preempcao(proc);
 				}
+               
 				TickClock();
 			}
 		}
 
-		private void Preempcao(Process novoProcesso) {
+		public void Preempcao(Process novoProcesso) {
 			if (CPU != null && CPU != novoProcesso) {
-				CPU.Promote();
-
-				//reorganiza os processos
-				prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
-
 				//Padding entre a instrução executada e o print do dispatcher
 				Console.WriteLine("");
 			}
@@ -94,9 +90,9 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// <paramref name="process"/> que entrou na CPU
 		/// </summary>
 		/// <param name="process">Processo que entrou na CPU</param>
-		private void PrintNewProcessInfo(Process process) {
+		public void PrintNewProcessInfo(Process process) {
 			if (process.TicksRan < 1) {
-				Console.WriteLine("dispatcher =>");
+                Console.WriteLine("dispatcher =>");
 				Console.WriteLine($"\t PID: {process.PID}");
 				Console.WriteLine($"\t ofsset: {process.MemoryUsed.StartIndex}");
 				Console.WriteLine($"\t blocks: {process.MemoryUsed.BlockSize}");
@@ -116,7 +112,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			Console.WriteLine($"process {process.PID} =>");
 		}
 
-		private void TickClock() {
+		public void TickClock() {
 
 			if (CPU != null) {
 				CPU.Run();
@@ -124,18 +120,27 @@ namespace MbOS.ProcessDomain.ProcessManager {
 				if (CPU.Concluido) {
 					FinishProcess(CPU);
 				}
+               
 			}
-
+         
 			foreach (var proc in Processos) {
-				proc.InitializationTime--;
-			}
+                if (proc.Priority > 1 && proc != CPU && proc.TicksRan>0 && !proc.Concluido ) {
+                    proc.Promote();
+                    //reorganiza os processos
+                    prioridades = Processos.GroupBy(p => p.Priority).OrderBy(p => p.Key);
 
-			tickCount++;
+                }
+                proc.InitializationTime--;
+
+            }
+
+            tickCount++;
 		}
 
 		private void FinishProcess(Process process) {
 			memoryManager.DeallocateMemory(process.PID, process.Priority == 0);
 			deviceManager.FreeResources(process.PID);
+            process.IsAllocated = false;
 
 			CPU = null;
 			processosCompletos++;
@@ -146,7 +151,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// caso não seja necessária a execução de nenhum processo no próximo "clock"
 		/// </summary>
 		/// <returns>O processo que deve ser executado</returns>
-		private Process GetNextProcess() {
+		public Process GetNextProcess() {
 
 			var processosPrioritarios = CPU == null ? prioridades
 				: prioridades.Where(p => p.Key < CPU.Priority);
@@ -155,16 +160,23 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 				//Para cada grupo prioridade, pega somente os processos dentro daquele grupo que estão pronto para executar.
 				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0).OrderBy(p=>p.PID);
-				var realTime = grupoPrioridade.Key == 0;
+                var readyToAllocate = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0 && p.TicksRan == 0).OrderBy(p => p.PID);
+                var realTime = grupoPrioridade.Key == 0;
 
-				foreach (var processo in readyToRun) {
+                foreach (var processo in readyToRun) {
 
-					//Cado o processo possa alocar os recursos pedidos
-					if (memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime) 
-						&& deviceManager.CanAllocateDevices(processo)) {
+                    var canAllocateMemory = memoryManager.CanAllocate(processo.MemoryUsed.BlockSize, realTime);
+                    var canAllocateDevice = deviceManager.CanAllocateDevices(processo);
 
-						// aloca memoria
-						memoryManager.AllocateMemory(processo.MemoryUsed, realTime);
+                    
+                    //Cado o processo possa alocar os recursos pedidos
+                    if ((canAllocateMemory || processo.IsAllocated)&&canAllocateDevice ) {
+
+                        // aloca memoria
+                        if (!processo.IsAllocated) {
+						    memoryManager.AllocateMemory(processo.MemoryUsed, realTime);
+                            processo.IsAllocated = true;
+                        }
 
 						// aloca recurso
 						deviceManager.Allocate(processo);
@@ -172,6 +184,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 						//retorna para execução
 						return processo;
 					}
+
 				}
 			}
 			return null;
