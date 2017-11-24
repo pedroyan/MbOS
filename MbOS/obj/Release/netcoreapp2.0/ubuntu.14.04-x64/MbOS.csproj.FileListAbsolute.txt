@@ -1,0 +1,15 @@
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/Resources/files.txt
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/Resources/processes.txt
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/libhostpolicy.so
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/libhostfxr.so
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.deps.json
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.runtimeconfig.json
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.runtimeconfig.dev.json
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.dll
+/home/pietro/Videos/T1SO/MbOS/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.pdb
+/home/pietro/Videos/T1SO/MbOS/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.csproj.CoreCompileInputs.cache
+/home/pietro/Videos/T1SO/MbOS/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.AssemblyInfoInputs.cache
+/home/pietro/Videos/T1SO/MbOS/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.AssemblyInfo.cs
+/home/pietro/Videos/T1SO/MbOS/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.dll
+/home/pietro/Videos/T1SO/MbOS/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.pdb

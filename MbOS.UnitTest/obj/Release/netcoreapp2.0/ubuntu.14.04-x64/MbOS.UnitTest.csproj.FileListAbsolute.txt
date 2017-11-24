@@ -1,0 +1,17 @@
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/Resources/files.txt
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/Resources/processes.txt
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.deps.json
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.runtimeconfig.json
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.runtimeconfig.dev.json
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.dll
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.pdb
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.dll
+/home/pietro/Videos/T1SO/MbOS.UnitTest/bin/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.pdb
+/home/pietro/Videos/T1SO/MbOS.UnitTest/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.csproj.CoreCompileInputs.cache
+/home/pietro/Videos/T1SO/MbOS.UnitTest/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.AssemblyInfoInputs.cache
+/home/pietro/Videos/T1SO/MbOS.UnitTest/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.AssemblyInfo.cs
+/home/pietro/Videos/T1SO/MbOS.UnitTest/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.dll
+/home/pietro/Videos/T1SO/MbOS.UnitTest/obj/Release/netcoreapp2.0/ubuntu.14.04-x64/MbOS.UnitTest.pdb
