@@ -1,0 +1,15 @@
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/Resources/files.txt
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/Resources/processes.txt
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/libhostpolicy.so
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/libhostfxr.so
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/MbOS
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/MbOS.deps.json
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/MbOS.runtimeconfig.json
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/MbOS.runtimeconfig.dev.json
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/MbOS.dll
+/home/pietro/Music/T1SO/MbOS/bin/Debug/netcoreapp2.0/linux-x64/MbOS.pdb
+/home/pietro/Music/T1SO/MbOS/obj/Debug/netcoreapp2.0/linux-x64/MbOS.csproj.CoreCompileInputs.cache
+/home/pietro/Music/T1SO/MbOS/obj/Debug/netcoreapp2.0/linux-x64/MbOS.AssemblyInfoInputs.cache
+/home/pietro/Music/T1SO/MbOS/obj/Debug/netcoreapp2.0/linux-x64/MbOS.AssemblyInfo.cs
+/home/pietro/Music/T1SO/MbOS/obj/Debug/netcoreapp2.0/linux-x64/MbOS.dll
+/home/pietro/Music/T1SO/MbOS/obj/Debug/netcoreapp2.0/linux-x64/MbOS.pdb
