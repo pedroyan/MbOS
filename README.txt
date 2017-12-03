@@ -8,8 +8,7 @@ COMO BUILDAR O PROJETO e em seguida rodar o programa:
 6)Acesse a pasta Release
 7)Acesse a pasta netcoreapp2.0
 8)Acesse a pasta linux-x64
-9)Acesse a pasta publish publish
-10)execute o programa MbOS utilizando o comando " ./MbOs <nome do arquivo de processos> <Nome do arquivo de files> "
+9)execute o programa MbOS utilizando o comando " ./MbOs <nome do arquivo de processos> <Nome do arquivo de files> "
 exemplo:
 ./MbOs Resources/process.txt Resources/files.txt
 
