@@ -10,11 +10,11 @@ COMO BUILDAR O PROJETO e em seguida rodar o programa:
 8)Acesse a pasta linux-x64
 9)execute o programa MbOS utilizando o comando " ./MbOs <nome do arquivo de processos> <Nome do arquivo de files> "
 exemplo:
-./MbOs Resources/process.txt Resources/files.txt
+./MbOS Resources/processes.txt Resources/files.txt
 
 COMO RODAR O PROGRAMA sem fazer o build:
 1)Extraia o arquivo RunPackage.zip 
 2)Acesse a pasta para onde o pacote foi extraído via terminal
 3)execute o programa MbOS utilizando o comando " ./MbOs <nome do arquivo de processos> <Nome do arquivo de files> "
 exemplo:
-./MbOs Resources/process.txt Resources/files.txt
+./MbOS Resources/processes.txt Resources/files.txt
