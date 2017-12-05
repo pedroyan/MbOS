@@ -3,14 +3,15 @@ using MbOS.Common;
 using MbOS.Interfaces;
 using MbOS.ProcessDomain.ProcessManager;
 using MbOS.FileDomain;
+using System.IO;
 
 namespace MbOS {
 	class Program {
 		static void Main(string[] args) {
 
 #if DEBUG
-			string processPath = "Resources/processProff.txt";
-			string filesPath = "Resources/filesProff.txt";
+			string processPath = Path.Combine("Resources","processes.txt");
+			string filesPath = Path.Combine("Resources","files.txt");
 #else
 			AppDomain.CurrentDomain.UnhandledException += MasterHandler;
 			if (args.Length != 2) {
