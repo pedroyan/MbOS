@@ -28,7 +28,7 @@ namespace MbOS {
 
 			var manager = new FileManager(filesPath);
 			manager.Run();
-			Console.ReadKey();
+			Console.WriteLine();
 		}
 
 		private static void MasterHandler(object sender, UnhandledExceptionEventArgs e) {
