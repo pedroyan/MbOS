@@ -48,7 +48,7 @@ namespace MbOS.FileDomain {
 			string line;
 			int i = 1;
 			while ((line = GetNextLine()) != null) {
-				var inst = ParseInstruction(line);
+				FileInstruction inst = ParseInstruction(line);
 				try {
 					//Testes podem ser feitos por injeção de dependência
 					inst.Execute(hardDrive, i);
