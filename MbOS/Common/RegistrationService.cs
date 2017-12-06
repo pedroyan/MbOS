@@ -7,7 +7,8 @@ namespace MbOS.Common {
 		static Dictionary<Type, object> RegistrationDictionary = new Dictionary<Type, object>();
 
 		/// <summary>
-		/// Registra uma Implementação para a interface passada
+		/// Registra uma Implementação para a interface passada utilizando o padrão
+		/// Service Locator
 		/// </summary>
 		/// <typeparam name="T">Tipo da interface</typeparam>
 		/// <param name="Instance">Implementação concreta da interface</param>
