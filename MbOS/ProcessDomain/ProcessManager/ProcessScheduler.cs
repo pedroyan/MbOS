@@ -46,7 +46,7 @@ namespace MbOS.ProcessDomain.ProcessManager {
 		/// </summary>
 		/// <param name="processes">Processos que serão gerenciados pelo escalonador</param>
 		public ProcessScheduler(List<Process> processes) {
-
+			processes = processes ?? new List<Process>();
 			if (processes.Count > 1000) {
 				throw new ArgumentException("Não é possível entrar com mais de 1000 processos");
 			}
