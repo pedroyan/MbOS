@@ -160,7 +160,6 @@ namespace MbOS.ProcessDomain.ProcessManager {
 
 				//Para cada grupo prioridade, pega somente os processos dentro daquele grupo que estão pronto para executar.
 				var readyToRun = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0).OrderBy(p=>p.PID);
-                var readyToAllocate = grupoPrioridade.Where(p => !p.Concluido && p.InitializationTime == 0 && p.TicksRan == 0).OrderBy(p => p.PID);
                 var realTime = grupoPrioridade.Key == 0;
 
                 foreach (var processo in readyToRun) {
