@@ -39,9 +39,9 @@ namespace MbOS.ProcessDomain.ProcessManager {
 			} catch (Exception ex) {
 				Console.WriteLine($"Erro no módulo de processos: {ex.Message}");
 				throw;
+			} finally{
+				initializationFile.Dispose();
 			}
-
-			initializationFile.Dispose();
 		}
 
 		/// <summary>
